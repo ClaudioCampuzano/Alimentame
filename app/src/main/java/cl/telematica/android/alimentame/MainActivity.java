@@ -3,6 +3,7 @@ package cl.telematica.android.alimentame;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -27,7 +28,12 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.GeofencingApi;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,22 +57,16 @@ public class MainActivity extends AppCompatActivity implements
     protected static final String TAG = "MainActivity";
     ListView listView;
     DrawerLayout drawerLayout;
-
     //Proporciona el punto de entrada a los servicios de Google Play.
     protected GoogleApiClient mGoogleApiClient;
-
     //Lista con las locaciones de ejemplo.
     protected ArrayList<Geofence> mGeofenceList;
-
     //Se utiliza para realizar un seguimiento de si se han añadido geofences.
     private boolean mGeofencesAdded;
-
     //Se utiliza cuando se solicita para agregar o quitar geofences.
     private PendingIntent mGeofencePendingIntent;
-
     //Used to persist application state about whether geofences were added
     private SharedPreferences mSharedPreferences;
-
     // Botones que se aprietan y que hacen saltar la accion descrita.
     private Button mAddGeofencesButton;
     private Button mRemoveGeofencesButton;
@@ -105,7 +105,50 @@ public class MainActivity extends AppCompatActivity implements
         listView.setAdapter(new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1,
                 opciones));
+        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
 
+            @Override
+            protected void onPreExecute(){
+
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                String resultado = new HttpServerConnection().connectToServer("http://alimentame-multimedios.esy.es/obtener_coordenadas.php", 15000);
+                return resultado;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                if(result != null){
+                    System.out.println(result);
+                }
+            }
+        };
+
+        task.execute();
+
+    }
+    private List<Localizacion> getLista(String result){
+        List<Localizacion> listaLocalizaciones = new ArrayList<Localizacion>();
+        try {
+            JSONArray lista = new JSONArray(result);
+
+            int size = lista.length();
+            for(int i = 0; i < size; i++){
+                Localizacion localizacion = new Localizacion();
+                JSONObject objeto = lista.getJSONObject(i);
+                localizacion.setLatitud(objeto.getDouble("latitud"));
+                localizacion.setLongitud(objeto.getDouble("longitud"));
+                localizacion.setVendedor(objeto.getString("vendedor"));
+                localizacion.setProducto(objeto.getString("producto"));
+                listaLocalizaciones.add(localizacion);
+            }
+            return listaLocalizaciones;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return listaLocalizaciones;
+        }
     }
 
 
