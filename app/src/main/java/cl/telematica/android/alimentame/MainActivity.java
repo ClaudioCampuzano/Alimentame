@@ -33,6 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements
     // Botones que se aprietan y que hacen saltar la accion descrita.
     private Button mAddGeofencesButton;
     private Button mRemoveGeofencesButton;
-
+    private HashMap<String,LatLng> area;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,33 +82,22 @@ public class MainActivity extends AppCompatActivity implements
         // Get the UI widgets.
         mAddGeofencesButton = (Button) findViewById(R.id.add_geofences_button);
         mRemoveGeofencesButton = (Button) findViewById(R.id.remove_geofences_button);
-
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<Geofence>();
-
         // Initially set the PendingIntent used in addGeofences() and removeGeofences() to null.
         mGeofencePendingIntent = null;
-
         // Retrieve an instance of the SharedPreferences object.
         mSharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME,
                 MODE_PRIVATE);
-
         // Get the value of mGeofencesAdded from SharedPreferences. Set to false as a default.
         mGeofencesAdded = mSharedPreferences.getBoolean(Constants.GEOFENCES_ADDED_KEY, false);
         setButtonsEnabledState();
-
         // Get the geofences used. Geofence data is hard coded in this sample.
-        populateGeofenceList();
-
+        populateGeofenceList(Constants.BAY_AREA_LANDMARKS);
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
-
-        String[] opciones = { "Opción 1", "Opción 2", "Opción 3", "Opción 4" };
-        listView.setAdapter(new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1,
-                opciones));
-        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-
+        area =new HashMap<String, LatLng>();
+        AsyncTask<Void,Void,String> zona = new AsyncTask<Void, Void, String>() {
             @Override
             protected void onPreExecute(){
 
@@ -117,16 +108,29 @@ public class MainActivity extends AppCompatActivity implements
                 String resultado = new HttpServerConnection().connectToServer("http://alimentame-multimedios.esy.es/obtener_coordenadas.php", 15000);
                 return resultado;
             }
-
             @Override
             protected void onPostExecute(String result) {
                 if(result != null){
                     System.out.println(result);
-                }
-            }
-        };
+                    List<Localizacion> lista = new ArrayList<Localizacion>();
+                    lista = getLista(result);
+                    for(int i=0;i<lista.size();i++){
+                        String vendedor = lista.get(i).getVendedor();
+                        String producto = lista.get(i).getProducto();
+                        area.put(vendedor + " vende: "+producto,
+                                new LatLng(lista.get(i).getLatitud(),lista.get(i).getLongitud()));
 
-        task.execute();
+                    }
+                }
+                if(!area.isEmpty()){
+                    populateGeofenceList(area);
+                }
+
+            }
+
+
+        };
+        zona.execute();
 
     }
     private List<Localizacion> getLista(String result){
@@ -152,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+
     //Builds a GoogleApiClient. Uses the {@code #addApi} method to request the LocationServices API.
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -165,12 +170,14 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+        Toast.makeText(this,"onStart",Toast.LENGTH_LONG);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mGoogleApiClient.disconnect();
+        Toast.makeText(this,"onStop",Toast.LENGTH_LONG);
     }
 
     /**
@@ -326,8 +333,8 @@ public class MainActivity extends AppCompatActivity implements
      * This sample hard codes geofence data. A real app might dynamically create geofences based on
      * the user's location.
      */
-    public void populateGeofenceList() {
-        for (Map.Entry<String, LatLng> entry : Constants.BAY_AREA_LANDMARKS.entrySet()) {
+    public void populateGeofenceList(HashMap<String,LatLng> zonas) {
+        for (Map.Entry<String, LatLng> entry : zonas.entrySet()) {
 
             mGeofenceList.add(new Geofence.Builder()
                     // Set the request ID of the geofence. This is a string to identify this
