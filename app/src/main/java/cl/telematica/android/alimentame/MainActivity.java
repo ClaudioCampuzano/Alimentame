@@ -3,6 +3,7 @@ package cl.telematica.android.alimentame;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -27,7 +28,12 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.GeofencingApi;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,22 +57,16 @@ public class MainActivity extends AppCompatActivity implements
     protected static final String TAG = "MainActivity";
     ListView listView;
     DrawerLayout drawerLayout;
-
     //Proporciona el punto de entrada a los servicios de Google Play.
     protected GoogleApiClient mGoogleApiClient;
-
     //Lista con las locaciones de ejemplo.
     protected ArrayList<Geofence> mGeofenceList;
-
     //Se utiliza para realizar un seguimiento de si se han añadido geofences.
     private boolean mGeofencesAdded;
-
     //Se utiliza cuando se solicita para agregar o quitar geofences.
     private PendingIntent mGeofencePendingIntent;
-
     //Used to persist application state about whether geofences were added
     private SharedPreferences mSharedPreferences;
-
     // Botones que se aprietan y que hacen saltar la accion descrita.
     private Button mAddGeofencesButton;
     private Button mRemoveGeofencesButton;
@@ -80,32 +80,67 @@ public class MainActivity extends AppCompatActivity implements
         // Get the UI widgets.
         mAddGeofencesButton = (Button) findViewById(R.id.add_geofences_button);
         mRemoveGeofencesButton = (Button) findViewById(R.id.remove_geofences_button);
-
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<Geofence>();
-
         // Initially set the PendingIntent used in addGeofences() and removeGeofences() to null.
         mGeofencePendingIntent = null;
-
         // Retrieve an instance of the SharedPreferences object.
         mSharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME,
                 MODE_PRIVATE);
-
         // Get the value of mGeofencesAdded from SharedPreferences. Set to false as a default.
         mGeofencesAdded = mSharedPreferences.getBoolean(Constants.GEOFENCES_ADDED_KEY, false);
         setButtonsEnabledState();
-
         // Get the geofences used. Geofence data is hard coded in this sample.
         populateGeofenceList();
-
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
-
         String[] opciones = { "Opción 1", "Opción 2", "Opción 3", "Opción 4" };
         listView.setAdapter(new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1,
                 opciones));
+        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
 
+            @Override
+            protected void onPreExecute(){
+
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                String resultado = new HttpServerConnection().connectToServer("http://alimentame-multimedios.esy.es/obtener_coordenadas.php", 15000);
+                return resultado;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                if(result != null){
+                    System.out.println(result);
+                }
+            }
+        };
+
+        task.execute();
+
+    }
+    private List<localizacion> getLista(String result){
+        List<localizacion> listaLocalizaciones = new ArrayList<localizacion>();
+        try {
+            JSONArray lista = new JSONArray(result);
+            int size = lista.length();
+            for(int i = 0; i < size; i++){
+                localizacion localizacion = new localizacion();
+                JSONObject objeto = lista.getJSONObject(i);
+                localizacion.setLatitud(objeto.getDouble("latitud"));
+                localizacion.setLongitud(objeto.getDouble("longitud"));
+                localizacion.setProducto(objeto.getString("producto"));
+                localizacion.setVendedor(objeto.getString("vendedor"));
+                listaLocalizaciones.add(localizacion);
+            }
+            return listaLocalizaciones;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return listaLocalizaciones;
+        }
     }
 
 
