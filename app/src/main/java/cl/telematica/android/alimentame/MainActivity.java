@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements
         ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status> {
 
     protected static final String TAG = "MainActivity";
+    private View activity;
     ListView listView;
     DrawerLayout drawerLayout;
     //Proporciona el punto de entrada a los servicios de Google Play.
@@ -165,6 +166,8 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if(!area.isEmpty()){
                     populateGeofenceList(area);
+                    removeGeofencesButtonHandler(activity);
+                    addGeofencesButtonHandler(activity);
                 }
                 onConnectionFinished();
             }
