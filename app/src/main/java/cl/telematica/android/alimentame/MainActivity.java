@@ -16,6 +16,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -72,7 +80,11 @@ public class MainActivity extends AppCompatActivity implements
     // Botones que se aprietan y que hacen saltar la accion descrita.
     private Button mAddGeofencesButton;
     private Button mRemoveGeofencesButton;
+    private Button actualizarDatos;
+    private Button agregarZona;
     private HashMap<String,LatLng> area;
+    private RequestQueue requestQueue;
+    private Peticiones peticion;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements
         // Get the UI widgets.
         mAddGeofencesButton = (Button) findViewById(R.id.add_geofences_button);
         mRemoveGeofencesButton = (Button) findViewById(R.id.remove_geofences_button);
+        actualizarDatos = (Button) findViewById(R.id.actualizar);
+        agregarZona = (Button) findViewById(R.id.agregar);
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<Geofence>();
         // Initially set the PendingIntent used in addGeofences() and removeGeofences() to null.
@@ -97,51 +111,78 @@ public class MainActivity extends AppCompatActivity implements
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
         area =new HashMap<String, LatLng>();
-        AsyncTask<Void,Void,String> zona = new AsyncTask<Void, Void, String>() {
+        peticion = Peticiones.getInstance(this.getApplicationContext());
+        requestQueue = peticion.getRequestQueue();
+        actualizarDatos.setOnClickListener(new View.OnClickListener() {
             @Override
-            protected void onPreExecute(){
+            public void onClick(View v) {
+                makeRequest();
+                Toast.makeText(v.getContext(),"Actualizacion Realizada",Toast.LENGTH_SHORT).show();
 
             }
+        });
 
+    }
+    public void addToQueue(Request request) {
+        if (request != null) {
+            request.setTag(this);
+            if (requestQueue == null)
+                requestQueue = peticion.getRequestQueue();
+            request.setRetryPolicy(new DefaultRetryPolicy(
+                    60000, 3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
+            onPreStartConnection();
+            requestQueue.add(request);
+        }
+    }
+
+    private void onPreStartConnection() {
+        this.setProgressBarIndeterminateVisibility(true);
+    }
+    public void onConnectionFinished() {
+        this.setProgressBarIndeterminateVisibility(false);
+    }
+
+    public void onConnectionFailed(String error) {
+        this.setProgressBarIndeterminateVisibility(false);
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    }
+
+    private void makeRequest(){
+        String url = "http://alimentame-multimedios.esy.es/obtener_coordenadas.php";
+        List<Localizacion> listaLocalizaciones = new ArrayList<Localizacion>();
+        JsonArrayRequest request = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
-            protected String doInBackground(Void... params) {
-                String resultado = new HttpServerConnection().connectToServer("http://alimentame-multimedios.esy.es/obtener_coordenadas.php", 15000);
-                return resultado;
-            }
-            @Override
-            protected void onPostExecute(String result) {
-                if(result != null){
-                    System.out.println(result);
-                    List<Localizacion> lista = new ArrayList<Localizacion>();
-                    lista = getLista(result);
-                    for(int i=0;i<lista.size();i++){
+            public void onResponse(JSONArray jsonArray) {
+                List<Localizacion> lista = new ArrayList<Localizacion>();
+                lista = getLista(jsonArray);
+                for(int i=0;i<lista.size();i++){
                         String vendedor = lista.get(i).getVendedor();
                         String producto = lista.get(i).getProducto();
-                        area.put(vendedor + " vende: "+producto,
+                        area.put(producto,
                                 new LatLng(lista.get(i).getLatitud(),lista.get(i).getLongitud()));
 
-                    }
                 }
                 if(!area.isEmpty()){
                     populateGeofenceList(area);
                 }
-
+                onConnectionFinished();
             }
-
-
-        };
-        zona.execute();
-
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                onConnectionFailed(volleyError.toString());
+            }
+        });
+        addToQueue(request);
     }
-    private List<Localizacion> getLista(String result){
+    private List<Localizacion> getLista(JSONArray jsonArray){
         List<Localizacion> listaLocalizaciones = new ArrayList<Localizacion>();
         try {
-            JSONArray lista = new JSONArray(result);
-
-            int size = lista.length();
+            int size = jsonArray.length();
             for(int i = 0; i < size; i++){
                 Localizacion localizacion = new Localizacion();
-                JSONObject objeto = lista.getJSONObject(i);
+                JSONObject objeto = jsonArray.getJSONObject(i);
                 localizacion.setLatitud(objeto.getDouble("latitud"));
                 localizacion.setLongitud(objeto.getDouble("longitud"));
                 localizacion.setVendedor(objeto.getString("vendedor"));
@@ -154,8 +195,6 @@ public class MainActivity extends AppCompatActivity implements
             return listaLocalizaciones;
         }
     }
-
-
 
     //Builds a GoogleApiClient. Uses the {@code #addApi} method to request the LocationServices API.
     protected synchronized void buildGoogleApiClient() {
