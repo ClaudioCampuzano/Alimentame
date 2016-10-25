@@ -46,6 +46,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cl.telematica.android.alimentame.POST.Publicar;
+
 /**
  * Demonstrates how to create and remove geofences using the GeofencingApi. Uses an IntentService
  * to monitor geofence transitions and creates notifications whenever a device enters or exits
@@ -123,6 +125,14 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
+        agregarZona = (Button) findViewById(R.id.agregar);
+        agregarZona.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent variable_aux  = new Intent(MainActivity.this,Publicar.class);
+                startActivity(variable_aux);
+            }
+        });
     }
     public void addToQueue(Request request) {
         if (request != null) {
