@@ -27,4 +27,7 @@
     <string name="unknown_geofence_transition">Desconocida transcion</string>
 
     <string name="geofence_transition_notification_text">Para retornar a la App haga click</string>
+    <string name="vendedor">Vendedor</string>
+    <string name="producto">Producto</string>
+    <string name="insertar">Publicar</string>
 </resources>
