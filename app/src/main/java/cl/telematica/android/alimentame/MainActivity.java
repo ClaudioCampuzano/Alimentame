@@ -16,6 +16,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -33,8 +41,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import cl.telematica.android.alimentame.POST.Publicar;
 
 /**
  * Demonstrates how to create and remove geofences using the GeofencingApi. Uses an IntentService
@@ -55,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements
         ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status> {
 
     protected static final String TAG = "MainActivity";
+    private View activity;
     ListView listView;
     DrawerLayout drawerLayout;
     //Proporciona el punto de entrada a los servicios de Google Play.
@@ -70,7 +83,11 @@ public class MainActivity extends AppCompatActivity implements
     // Botones que se aprietan y que hacen saltar la accion descrita.
     private Button mAddGeofencesButton;
     private Button mRemoveGeofencesButton;
-
+    private Button actualizarDatos;
+    private Button agregarZona;
+    private HashMap<String,LatLng> area;
+    private RequestQueue requestQueue;
+    private Peticiones peticion;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements
         // Get the UI widgets.
         mAddGeofencesButton = (Button) findViewById(R.id.add_geofences_button);
         mRemoveGeofencesButton = (Button) findViewById(R.id.remove_geofences_button);
+        actualizarDatos = (Button) findViewById(R.id.actualizar);
+        agregarZona = (Button) findViewById(R.id.agregar);
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<Geofence>();
         // Initially set the PendingIntent used in addGeofences() and removeGeofences() to null.
@@ -91,50 +110,96 @@ public class MainActivity extends AppCompatActivity implements
         mGeofencesAdded = mSharedPreferences.getBoolean(Constants.GEOFENCES_ADDED_KEY, false);
         setButtonsEnabledState();
         // Get the geofences used. Geofence data is hard coded in this sample.
-        populateGeofenceList();
+        populateGeofenceList(Constants.BAY_AREA_LANDMARKS);
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
-        String[] opciones = { "Opción 1", "Opción 2", "Opción 3", "Opción 4" };
-        listView.setAdapter(new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1,
-                opciones));
-        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-
+        // Kick off the request to build GoogleApiClient.
+        area =new HashMap<String, LatLng>();
+        peticion = Peticiones.getInstance(this.getApplicationContext());
+        requestQueue = peticion.getRequestQueue();
+        actualizarDatos.setOnClickListener(new View.OnClickListener() {
             @Override
-            protected void onPreExecute(){
+            public void onClick(View v) {
+                makeRequest();
+                Toast.makeText(v.getContext(),"Actualizacion Realizada",Toast.LENGTH_SHORT).show();
 
             }
-
+        });
+        agregarZona.setOnClickListener(new View.OnClickListener() {
             @Override
-            protected String doInBackground(Void... params) {
-                String resultado = new HttpServerConnection().connectToServer("http://alimentame-multimedios.esy.es/obtener_coordenadas.php", 15000);
-                return resultado;
+            public void onClick(View v) {
+                Intent variable_aux  = new Intent(MainActivity.this,Publicar.class);
+                startActivity(variable_aux);
             }
-
-            @Override
-            protected void onPostExecute(String result) {
-                if(result != null){
-                    System.out.println(result);
-                }
-            }
-        };
-
-        task.execute();
-
+        });
     }
-    private List<localizacion> getLista(String result){
-        List<localizacion> listaLocalizaciones = new ArrayList<localizacion>();
+    public void addToQueue(Request request) {
+        if (request != null) {
+            request.setTag(this);
+            if (requestQueue == null)
+                requestQueue = peticion.getRequestQueue();
+            request.setRetryPolicy(new DefaultRetryPolicy(
+                    60000, 3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
+            onPreStartConnection();
+            requestQueue.add(request);
+        }
+    }
+
+    private void onPreStartConnection() {
+        this.setProgressBarIndeterminateVisibility(true);
+    }
+    public void onConnectionFinished() {
+        this.setProgressBarIndeterminateVisibility(false);
+    }
+
+    public void onConnectionFailed(String error) {
+        this.setProgressBarIndeterminateVisibility(false);
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    }
+
+    private void makeRequest(){
+        String url = "http://alimentame-multimedios.esy.es/obtener_coordenadas.php";
+        List<Localizacion> listaLocalizaciones = new ArrayList<Localizacion>();
+        JsonArrayRequest request = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray jsonArray) {
+                List<Localizacion> lista = new ArrayList<Localizacion>();
+                lista = getLista(jsonArray);
+                for(int i=0;i<lista.size();i++){
+                        String vendedor = lista.get(i).getVendedor();
+                        String producto = lista.get(i).getProducto();
+                        area.put(producto,
+                                new LatLng(lista.get(i).getLatitud(),lista.get(i).getLongitud()));
+
+                }
+                if(!area.isEmpty()){
+                    populateGeofenceList(area);
+                    removeGeofencesButtonHandler(activity);
+                    addGeofencesButtonHandler(activity);
+                }
+                onConnectionFinished();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                onConnectionFailed(volleyError.toString());
+            }
+        });
+        addToQueue(request);
+    }
+    private List<Localizacion> getLista(JSONArray jsonArray){
+        List<Localizacion> listaLocalizaciones = new ArrayList<Localizacion>();
         try {
-            JSONArray lista = new JSONArray(result);
-            int size = lista.length();
+            int size = jsonArray.length();
             for(int i = 0; i < size; i++){
-                localizacion localizacion = new localizacion();
-                JSONObject objeto = lista.getJSONObject(i);
-                localizacion.setLatitud(objeto.getDouble("latitud"));
-                localizacion.setLongitud(objeto.getDouble("longitud"));
-                localizacion.setProducto(objeto.getString("producto"));
-                localizacion.setVendedor(objeto.getString("vendedor"));
-                listaLocalizaciones.add(localizacion);
+                Localizacion Localizacion = new Localizacion();
+                JSONObject objeto = jsonArray.getJSONObject(i);
+                Localizacion.setLatitud(objeto.getDouble("latitud"));
+                Localizacion.setLongitud(objeto.getDouble("longitud"));
+                Localizacion.setVendedor(objeto.getString("vendedor"));
+                Localizacion.setProducto(objeto.getString("producto"));
+                listaLocalizaciones.add(Localizacion);
             }
             return listaLocalizaciones;
         } catch (JSONException e) {
@@ -142,7 +207,6 @@ public class MainActivity extends AppCompatActivity implements
             return listaLocalizaciones;
         }
     }
-
 
     //Builds a GoogleApiClient. Uses the {@code #addApi} method to request the LocationServices API.
     protected synchronized void buildGoogleApiClient() {
@@ -157,12 +221,14 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+        Toast.makeText(this,"onStart",Toast.LENGTH_LONG);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mGoogleApiClient.disconnect();
+        Toast.makeText(this,"onStop",Toast.LENGTH_LONG);
     }
 
     /**
@@ -318,8 +384,8 @@ public class MainActivity extends AppCompatActivity implements
      * This sample hard codes geofence data. A real app might dynamically create geofences based on
      * the user's location.
      */
-    public void populateGeofenceList() {
-        for (Map.Entry<String, LatLng> entry : Constants.BAY_AREA_LANDMARKS.entrySet()) {
+    public void populateGeofenceList(HashMap<String,LatLng> zonas) {
+        for (Map.Entry<String, LatLng> entry : zonas.entrySet()) {
 
             mGeofenceList.add(new Geofence.Builder()
                     // Set the request ID of the geofence. This is a string to identify this
