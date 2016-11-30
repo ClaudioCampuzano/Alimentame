@@ -13,7 +13,6 @@
     android:layout_height="match_parent">
     <Button
         android:text="@string/remove_geofences"
-        android:onClick="removeGeofencesButtonHandler"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/remove_geofences_button"
@@ -27,7 +26,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/add_geofences_button"
-        android:onClick="addGeofencesButtonHandler"
         tools:ignore="UnknownId"
         android:layout_alignBaseline="@+id/remove_geofences_button"
         android:layout_alignBottom="@+id/remove_geofences_button"

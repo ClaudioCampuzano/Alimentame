@@ -27,9 +27,7 @@ import java.util.HashMap;
  * Constantes usadas por la aplicacion.
  */
 public final class Constants {
-
-    private Constants() {
-    }
+    private Constants() {    }
 
     public static final String PACKAGE_NAME = "com.google.android.gms.location.Geofence";
 
@@ -52,8 +50,6 @@ public final class Constants {
 
     public static final HashMap<String, LatLng> BAY_AREA_LANDMARKS = new HashMap<String, LatLng>();
     static {
-        BAY_AREA_LANDMARKS.put("Esquina LabQui", new LatLng(-33.035341, -71.594965));
-        BAY_AREA_LANDMARKS.put("B-212", new LatLng(-33.035532,-71.595490));
         BAY_AREA_LANDMARKS.put("Mi Casa", new LatLng(-33.049191, -71.400149));
     }
 }
