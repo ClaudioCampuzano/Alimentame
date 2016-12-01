@@ -2,50 +2,25 @@ package cl.telematica.android.alimentame;
 
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.GeofencingApi;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.maps.model.LatLng;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
+import cl.telematica.android.alimentame.LogIn.LogInActivity;
 import cl.telematica.android.alimentame.POST.Publicar;
 import cl.telematica.android.alimentame.Presenters.ConectionPresentersImpl;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
@@ -91,10 +66,27 @@ public class MainActivity extends AppCompatActivity{
     private Peticiones peticion;
     private ConectionPresenters conectionPresenters;
     private GoogleApi googleApi;
+
+
+    //Variables para saber si se está logeado o no
+    private boolean logged;
+    private int userID;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Seteo de variables de log, prontamente conexión a base de datos
+        logged = false;
+        Bundle bundle = getIntent().getExtras();
+        if(bundle.getString("logged") == "true"){
+            logged = true;
+        }
+        userID = 0;
+        // Intervención para comprobar el login
+        checkLog();
+
         listView = (ListView) findViewById(R.id.list_view);
         drawerLayout=(DrawerLayout) findViewById(R.id.drawer_layout);
         mAddGeofencesButton = (Button) findViewById(R.id.add_geofences_button);
@@ -144,6 +136,7 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onStart() {
+        checkLog();
         super.onStart();
         googleApi.mGoogleApiClient.connect();
         Toast.makeText(this,"onStart",Toast.LENGTH_LONG);
@@ -154,6 +147,13 @@ public class MainActivity extends AppCompatActivity{
         super.onStop();
         googleApi.mGoogleApiClient.disconnect();
         Toast.makeText(this,"onStop",Toast.LENGTH_LONG);
+    }
+
+    public void checkLog(){
+        if (!logged){
+            Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+            startActivity(intent);
+        }
     }
 
     /**
