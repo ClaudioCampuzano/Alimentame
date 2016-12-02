@@ -27,75 +27,68 @@ import cl.telematica.android.alimentame.R;
 
 import static com.android.volley.Request.Method.POST;
 
-public class LogInActivity extends AppCompatActivity {
+public class SignUp extends AppCompatActivity {
 
-    private EditText userT, passT;
-    private String user;
-    private String pass;
-    private String hashPass;
-    private Button buttonLogin, buttonSignUp;
-    String url = "http://alimentame-multimedios.esy.es/login.php";
+    private EditText userT, passT, descT, imgT;
+    private Button btn;
+
+    String url = "http://alimentame-multimedios.esy.es/signup.php";
     AlertDialog.Builder builder;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_log_in);
-        userT = ((EditText) findViewById(R.id.signinUser));
-        passT = ((EditText) findViewById(R.id.signinPass));
-        buttonLogin = (Button) findViewById(R.id.signinButton);
-        buttonSignUp = (Button)findViewById(R.id.signUp);
-        builder = new AlertDialog.Builder(LogInActivity.this);
-        buttonSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LogInActivity.this, SignUp.class);
-                startActivity(intent);
-            }
-        }
-        );
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_sign_up);
+        userT = (EditText)findViewById(R.id.signupUser);
+        passT = (EditText)findViewById(R.id.signupPass);
+        descT = (EditText)findViewById(R.id.signupDesc);
+        imgT = (EditText)findViewById(R.id.signupImg);
+        btn = (Button)findViewById(R.id.signupButton);
+        builder = new AlertDialog.Builder(SignUp.this);
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final String user, pass;
+                final String user, pass, desc, img;
                 user = userT.getText().toString();
                 pass = passT.getText().toString();
+                desc = descT.getText().toString();
+                img = imgT.getText().toString();
                 try {
                     String hpass = new String(digest(pass), "UTF-8");
-                    Toast.makeText(LogInActivity.this, hpass, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUp.this, hpass, Toast.LENGTH_SHORT).show();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
-                if (!user.equalsIgnoreCase("") &&
-                        !pass.equalsIgnoreCase("")) {
+                if (!user.equalsIgnoreCase("") && !pass.equalsIgnoreCase("")) {
                     StringRequest stringRequest = new StringRequest(POST, url, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             builder.setMessage(response);
                             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    userT.setText("");
-                                    passT.setText("");
-                                }
-                            }
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            userT.setText("");
+                                            passT.setText("");
+                                            descT.setText("");
+                                            imgT.setText("");
+                                        }
+                                    }
                             );
                             if(response == "true"){
-                                Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+                                Intent intent = new Intent(SignUp.this, MainActivity.class);
                                 intent.putExtra("logged", response);
                                 startActivity(intent);
                             }
-                            Toast.makeText(LogInActivity.this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUp.this, "Nombre de usuario en uso", Toast.LENGTH_SHORT).show();
                             //Toast.makeText(v.getContext(), "Insercion exitosa", Toast.LENGTH_LONG).show();
                             //restartFirstActivity();
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(LogInActivity.this, "Error", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SignUp.this, "Error", Toast.LENGTH_LONG).show();
                             error.printStackTrace();
                         }
                     }) {
@@ -103,6 +96,8 @@ public class LogInActivity extends AppCompatActivity {
                         protected Map<String, String> getParams() throws AuthFailureError {
                             Map<String, String> params = new HashMap<String, String>();
                             params.put("user", user);
+                            params.put("desc", desc);
+                            params.put("img", img);
                             try {
                                 params.put("pass", new String(digest(pass), "UTF-8"));
                             } catch (UnsupportedEncodingException e) {
@@ -113,15 +108,12 @@ public class LogInActivity extends AppCompatActivity {
                             return params;
                         }
                     };
-                    MySingleton.getmInstance(LogInActivity.this).addTorequestque(stringRequest);
+                    MySingleton.getmInstance(SignUp.this).addTorequestque(stringRequest);
                 } else
-                    Toast.makeText(LogInActivity.this, "Hay informacion por rellenar", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignUp.this, "Hay informacion por rellenar", Toast.LENGTH_LONG).show();
             }
         });
-
     }
-
-
 
     //Algoritmo para codificar la password
     public byte[] digest(String value) throws NoSuchAlgorithmException {

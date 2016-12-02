@@ -22,7 +22,8 @@
         <service android:name=".GeofenceTransitionsIntentService" />
 
         <activity android:name=".POST.Publicar" />
-        <activity android:name=".LogIn.LogInActivity"></activity>
+        <activity android:name=".LogIn.LogInActivity" />
+        <activity android:name=".LogIn.SignUp"></activity>
     </application>
 
 </manifest>
