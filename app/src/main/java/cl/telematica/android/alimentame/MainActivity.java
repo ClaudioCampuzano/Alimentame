@@ -74,9 +74,6 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         //Seteo de variables de log, prontamente conexión a base de datos
         logged = false;
         Bundle bundle = getIntent().getExtras();
@@ -84,6 +81,8 @@ public class MainActivity extends AppCompatActivity{
             logged = true;
         }
         userID = 0;
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         // Intervención para comprobar el login
         checkLog();
 

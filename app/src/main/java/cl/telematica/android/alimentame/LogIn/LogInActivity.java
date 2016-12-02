@@ -1,23 +1,31 @@
 package cl.telematica.android.alimentame.LogIn;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 import cl.telematica.android.alimentame.MainActivity;
+import cl.telematica.android.alimentame.POST.MySingleton;
 import cl.telematica.android.alimentame.R;
+
+import static com.android.volley.Request.Method.POST;
 
 public class LogInActivity extends AppCompatActivity {
 
@@ -26,83 +34,84 @@ public class LogInActivity extends AppCompatActivity {
     private String pass;
     private String hashPass;
     private Button buttonLogin;
-
-
+    String url = "http://alimentame-multimedios.esy.es/login.php";
+    AlertDialog.Builder builder;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-        userT = ((EditText)findViewById(R.id.signinUser));
-        passT = ((EditText)findViewById(R.id.signinPass));
-        buttonLogin = (Button)findViewById(R.id.signinButton);
-
-
-
-    }
-
-    public void LogIn(){
-        try {
-            hashPass = digest(pass).toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        user = userT.getText().toString();
-        pass = passT.getText().toString();
-        if(checkDB(user, pass) == "true"){
-            Intent intent = new Intent(LogInActivity.this, MainActivity.class);
-            intent.putExtra("logged", "true");
-            startActivity(intent);
-        }
-
-    }
-
-
-    public String checkDB(String user, String psw){
-        String data = null;
-        try {
-            data = URLEncoder.encode("user", "UTF-8")
-                    + "=" + URLEncoder.encode(user, "UTF-8");
-            data += "&" + URLEncoder.encode("psw", "UTF-8") + "="
-                    + URLEncoder.encode(psw, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String text = "";
-        BufferedReader reader=null;
-        URL url = null;
-        try {
-            // Defined URL  where to send data
-            url = new URL("alimentame-multimedios.esy.es/login.php");
-            // Send POST data request
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-            wr.write( data );
-            wr.flush();
-            // Get the server response
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-            // Read Server Response
-            while((line = reader.readLine()) != null) {
-                // Append server response in string
-                sb.append(line + "\n");
+        userT = ((EditText) findViewById(R.id.signinUser));
+        passT = ((EditText) findViewById(R.id.signinPass));
+        buttonLogin = (Button) findViewById(R.id.signinButton);
+        builder = new AlertDialog.Builder(LogInActivity.this);
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                final String user, pass;
+                user = userT.getText().toString();
+                pass = passT.getText().toString();
+                try {
+                    String hpass = new String(digest(pass), "UTF-8");
+                    Toast.makeText(LogInActivity.this, hpass, Toast.LENGTH_SHORT).show();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                if (!user.equalsIgnoreCase("") &&
+                        !pass.equalsIgnoreCase("")) {
+                    StringRequest stringRequest = new StringRequest(POST, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            builder.setMessage(response);
+                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    userT.setText("");
+                                    passT.setText("");
+                                }
+                            }
+                            );
+                            if(response == "true"){
+                                Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+                                intent.putExtra("logged", response);
+                                startActivity(intent);
+                            }
+                            Toast.makeText(LogInActivity.this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(v.getContext(), "Insercion exitosa", Toast.LENGTH_LONG).show();
+                            //restartFirstActivity();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(LogInActivity.this, "Error", Toast.LENGTH_LONG).show();
+                            error.printStackTrace();
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("user", user);
+                            try {
+                                params.put("pass", new String(digest(pass), "UTF-8"));
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchAlgorithmException e) {
+                                e.printStackTrace();
+                            }
+                            return params;
+                        }
+                    };
+                    MySingleton.getmInstance(LogInActivity.this).addTorequestque(stringRequest);
+                } else
+                    Toast.makeText(LogInActivity.this, "Hay informacion por rellenar", Toast.LENGTH_LONG).show();
             }
-            text = sb.toString();
-        }
-        catch(Exception ex) {
-        }
-        finally {
-            try {
-                reader.close();
-            }
-            catch(Exception ex) {}
-        }
-        // Show response on activity
-        return text;
+        });
+
     }
+
 
 
     //Algoritmo para codificar la password
@@ -115,4 +124,5 @@ public class LogInActivity extends AppCompatActivity {
 
         return digester.digest();
     }
+
 }
