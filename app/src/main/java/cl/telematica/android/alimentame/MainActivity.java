@@ -17,10 +17,14 @@ import com.google.android.gms.location.GeofencingApi;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import cl.telematica.android.alimentame.LogIn.LogInActivity;
+import cl.telematica.android.alimentame.LogIn.UsuarioLogged;
 import cl.telematica.android.alimentame.POST.Publicar;
 import cl.telematica.android.alimentame.Presenters.ConectionPresentersImpl;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
@@ -68,24 +72,34 @@ public class MainActivity extends AppCompatActivity{
     private GoogleApi googleApi;
 
 
-    //Variables para saber si se está logeado o no
+    /*** LOG ADDITIONS ***/
     private boolean logged;
-    private int userID;
+    private UsuarioLogged User;
+    /*** LOG ADDITIONS ***/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        //Seteo de variables de log, prontamente conexión a base de datos
+
+
+        /*** LOG ADITIONS ***/
         logged = false;
+        User.setID(0);
         Bundle bundle = getIntent().getExtras();
-        if(bundle.getString("logged") == "true"){
+        if(bundle.getString("logged") != "false"){
             logged = true;
+            try {
+                User = new UsuarioLogged(new JSONObject(bundle.getString("logged")), bundle.getString("id"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-        userID = 0;
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         // Intervención para comprobar el login
         checkLog();
+        /*** LOG ADITIONS ***/
 
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.list_view);
         drawerLayout=(DrawerLayout) findViewById(R.id.drawer_layout);
         mAddGeofencesButton = (Button) findViewById(R.id.add_geofences_button);
@@ -135,7 +149,9 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onStart() {
-        checkLog();
+        /*** LOG ADDITIONS ***/
+        //checkLog();
+        /*** LOG ADDITIONS ***/
         super.onStart();
         googleApi.mGoogleApiClient.connect();
         Toast.makeText(this,"onStart",Toast.LENGTH_LONG);
@@ -148,15 +164,19 @@ public class MainActivity extends AppCompatActivity{
         Toast.makeText(this,"onStop",Toast.LENGTH_LONG);
     }
 
+    /*** LOG ADDITIONS ***/
     public void checkLog(){
         if (!logged){
             Intent intent = new Intent(MainActivity.this, LogInActivity.class);
             startActivity(intent);
         }
     }
-
-    /**
-     * Runs when a GoogleApiClient object successfully connects.
-     */
+    public void setUser(UsuarioLogged user) {
+        User = user;
+    }
+    public UsuarioLogged getUser() {
+        return this.User;
+    }
+    /*** LOG ADDITIONS ***/
 
 }

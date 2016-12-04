@@ -34,8 +34,9 @@ public class LogInActivity extends AppCompatActivity {
     private String pass;
     private String hashPass;
     private Button buttonLogin, buttonSignUp;
-    String url = "http://alimentame-multimedios.esy.es/login.php";
-    AlertDialog.Builder builder;
+    private String url = "http://alimentame-multimedios.esy.es/login.php";
+    private AlertDialog.Builder builder;
+    private UsuarioLogged Usuario;
 
 
     @Override
@@ -83,14 +84,13 @@ public class LogInActivity extends AppCompatActivity {
                                 }
                             }
                             );
-                            if(response == "true"){
+                            if(response != "false"){
                                 Intent intent = new Intent(LogInActivity.this, MainActivity.class);
-                                intent.putExtra("logged", response);
+                                intent.putExtra("logged", getUsuario(response));
+                                intent.putExtra("id", response);
                                 startActivity(intent);
                             }
                             Toast.makeText(LogInActivity.this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
-                            //Toast.makeText(v.getContext(), "Insercion exitosa", Toast.LENGTH_LONG).show();
-                            //restartFirstActivity();
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -121,8 +121,6 @@ public class LogInActivity extends AppCompatActivity {
 
     }
 
-
-
     //Algoritmo para codificar la password
     public byte[] digest(String value) throws NoSuchAlgorithmException {
         MessageDigest digester = MessageDigest.getInstance("SHA-256");
@@ -132,5 +130,37 @@ public class LogInActivity extends AppCompatActivity {
         digester.update(stringBytes, 0, stringBytes.length);
 
         return digester.digest();
+    }
+    public String getUsuario(final String ID) {
+        final String n_url = "http://alimentame-multimedios.esy.es/getuser.php";
+        final String[] respuesta = new String[1];
+        final UsuarioLogged[] r_user = new UsuarioLogged[1];
+        StringRequest stringRequest = new StringRequest(POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                builder.setMessage(response);
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                respuesta[0] = response;
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(LogInActivity.this, "Error", Toast.LENGTH_LONG).show();
+                error.printStackTrace();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id", ID);
+                return params;
+            }
+        };
+        MySingleton.getmInstance(LogInActivity.this).addTorequestque(stringRequest);
+        return respuesta[0];
     }
 }
