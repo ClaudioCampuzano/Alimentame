@@ -2,33 +2,21 @@ package cl.telematica.android.alimentame.POST;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import cl.telematica.android.alimentame.POST.Presenters.Contract.PublicarPresenters;
 import cl.telematica.android.alimentame.POST.Presenters.GPSTracker;
-import cl.telematica.android.alimentame.POST.Presenters.MySingleton;
 import cl.telematica.android.alimentame.POST.Presenters.PublicarImpl;
+import cl.telematica.android.alimentame.POST.View.PublicarView;
 import cl.telematica.android.alimentame.R;
 
 public class Publicar extends AppCompatActivity implements PublicarView {
@@ -77,6 +65,11 @@ public class Publicar extends AppCompatActivity implements PublicarView {
         }else {
             Toast.makeText(Publicar.this,"Hay informacion por rellenar",Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void listarProductos(View V) {
+        Toast.makeText(Publicar.this,"Productos listados en recyclerView",Toast.LENGTH_LONG).show();
     }
 
     @Override

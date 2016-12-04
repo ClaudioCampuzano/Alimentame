@@ -1,4 +1,4 @@
-package cl.telematica.android.alimentame.POST;
+package cl.telematica.android.alimentame.POST.View;
 
 import android.view.View;
 
@@ -8,5 +8,6 @@ import android.view.View;
 
 public interface PublicarView {
     void publicar (View V);
+    void listarProductos(View V);
     void RestaurarActividadPrincipal();
 }
