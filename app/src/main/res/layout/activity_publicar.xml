@@ -22,12 +22,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/vendedor"
+        android:text="@string/Name_prod"
         android:textColor="@color/wallet_bright_foreground_holo_light"
         android:textSize="20sp" />
 
     <EditText
-        android:id="@+id/vendedor"
+        android:id="@+id/Nombre_prod"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -37,19 +37,34 @@
     </EditText>
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/producto"
+        android:text="@string/Descripcion"
         android:textColor="@color/wallet_bright_foreground_holo_light"
         android:textSize="20sp" />
 
     <EditText
-        android:id="@+id/producto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10"
+        android:id="@+id/Descripcion" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Precio"
+        android:textColor="@color/wallet_bright_foreground_holo_light"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/Precio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text" />
+        android:inputType="number" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,7 +76,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="@string/insertar"
-            android:elevation="0dp" />
+            android:elevation="0dp"
+            android:onClick="publicar"/>
     </LinearLayout>
 
 </LinearLayout>

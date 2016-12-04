@@ -1,4 +1,4 @@
-package cl.telematica.android.alimentame.POST;
+package cl.telematica.android.alimentame.POST.Presenters;
 
 import android.content.Context;
 
