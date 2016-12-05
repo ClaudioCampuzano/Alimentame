@@ -97,12 +97,6 @@ public class PublicarImpl implements PublicarPresenters {
     }
 
     @Override
-    public void UpListar(String user_id) {
-        Intent explicit_intent = new Intent(mActivity,VerProductos.class);
-        explicit_intent.putExtra("User_ID",user_id);
-        mActivity.startActivity(explicit_intent);
-    }
-    @Override
     public void InicializarGps() {
         mContext = mActivity;
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

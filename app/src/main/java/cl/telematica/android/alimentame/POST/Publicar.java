@@ -16,12 +16,16 @@ import cl.telematica.android.alimentame.R;
 public class Publicar extends AppCompatActivity implements PublicarView {
     private PublicarPresenters mPresenter;
     public EditText Nombre, Precio, Descripcion, Imagen;
+    String User_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         setContentView(R.layout.activity_publicar);
+
+        User_ID = getIntent().getStringExtra("User_ID");
+
         mPresenter = new PublicarImpl(this);
         Nombre = (EditText)findViewById(R.id.Nombre_prod);
         Precio = (EditText) findViewById(R.id.Precio);
@@ -34,16 +38,11 @@ public class Publicar extends AppCompatActivity implements PublicarView {
         if (!Nombre.getText().toString().equalsIgnoreCase("") &&
                 !Precio.getText().toString().equalsIgnoreCase("") && !Descripcion.getText().toString().equalsIgnoreCase("")){
             mPresenter.SetData(Nombre.getText().toString(),Precio.getText().toString(),Descripcion.getText().toString(),
-                    "1","1","puto.png");
+                    User_ID,"1","puto.png");
             mPresenter.UploadData();
         }else {
             Toast.makeText(Publicar.this,"Hay informacion por rellenar",Toast.LENGTH_LONG).show();
         }
-    }
-
-    @Override
-    public void listarProductos(View V) {
-        mPresenter.UpListar("2");
     }
 
     @Override
@@ -52,5 +51,10 @@ public class Publicar extends AppCompatActivity implements PublicarView {
                 .getLaunchIntentForPackage(getApplicationContext().getPackageName() );
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK );
         startActivity(i);
+    }
+
+    @Override
+    public void TomarFoto(View V) {
+        Toast.makeText(Publicar.this,"Tomando foto", Toast.LENGTH_SHORT).show();
     }
 }

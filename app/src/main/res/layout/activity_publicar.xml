@@ -66,6 +66,13 @@
         android:ems="10"
         android:inputType="number" />
 
+    <Button
+        android:text="Tomar foto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Foto"
+        android:onClick="TomarFoto"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -79,12 +86,5 @@
             android:elevation="0dp"
             android:onClick="publicar"/>
     </LinearLayout>
-
-    <Button
-        android:text="Listar Productos"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ListarProd"
-        android:onClick="listarProductos"/>
 
 </LinearLayout>

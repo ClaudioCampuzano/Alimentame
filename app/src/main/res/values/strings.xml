@@ -31,4 +31,7 @@
     <string name="Precio">Precio</string>
     <string name="Descripcion">Descipcion</string>
     <string name="insertar">Publicar</string>
+    <string name="interfaz_vendedor">Interfaz Vendedor</string>
+    <string name="button">Publicar producto</string>
+    <string name="button1">Ver productos publicados</string>
 </resources>

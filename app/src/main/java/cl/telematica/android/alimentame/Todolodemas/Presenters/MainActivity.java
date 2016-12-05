@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cl.telematica.android.alimentame.POST.Publicar;
+import cl.telematica.android.alimentame.POST.Vendedor;
 import cl.telematica.android.alimentame.R;
 import cl.telematica.android.alimentame.Todolodemas.Presenters.Contact.ConectionPresenters;
 
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity{
         agregarZona.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent variable_aux  = new Intent(MainActivity.this,Publicar.class);
+                Intent variable_aux  = new Intent(MainActivity.this,Vendedor.class);
                 startActivity(variable_aux);
             }
         });

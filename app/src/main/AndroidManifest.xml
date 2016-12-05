@@ -25,7 +25,8 @@
         <service android:name=".Todolodemas.Presenters.GeofenceTransitionsIntentService" />
 
         <activity android:name=".POST.Publicar" />
-        <activity android:name=".POST.VerProductos"></activity>
+        <activity android:name=".POST.VerProductos" />
+        <activity android:name=".POST.Vendedor"></activity>
     </application>
 
 </manifest>

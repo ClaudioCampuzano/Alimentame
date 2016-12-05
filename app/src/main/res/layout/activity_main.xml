@@ -45,7 +45,7 @@
         android:layout_marginStart="16dp" />
 
     <Button
-        android:text="Agregar zona actual"
+        android:text="@string/interfaz_vendedor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="11dp"

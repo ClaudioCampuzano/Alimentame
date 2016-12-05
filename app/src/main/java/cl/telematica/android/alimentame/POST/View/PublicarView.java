@@ -8,6 +8,6 @@ import android.view.View;
 
 public interface PublicarView {
     void publicar (View V);
-    void listarProductos(View V);
     void RestaurarActividadPrincipal();
+    void TomarFoto(View V);
 }
