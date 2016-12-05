@@ -30,4 +30,5 @@
     <string name="vendedor">Vendedor</string>
     <string name="producto">Producto</string>
     <string name="insertar">Publicar</string>
+    <string name="title_activity_user">Map</string>
 </resources>

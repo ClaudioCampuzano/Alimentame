@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cl.telematica.android.alimentame;
+package cl.telematica.android.alimentame.Presenters;
 
 /**
  * Created by Claudio on 07-10-2016.
@@ -24,6 +24,8 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.google.android.gms.location.GeofenceStatusCodes;
+
+import cl.telematica.android.alimentame.R;
 
 /**
  * Geofence error codes mapped to error messages.

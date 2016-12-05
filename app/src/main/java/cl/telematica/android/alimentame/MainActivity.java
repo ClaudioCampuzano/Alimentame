@@ -1,55 +1,37 @@
 package cl.telematica.android.alimentame;
 
+import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.GeofencingApi;
 import com.google.android.gms.maps.model.LatLng;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
+import cl.telematica.android.alimentame.Models.Localizacion;
+import cl.telematica.android.alimentame.Models.Peticiones;
 import cl.telematica.android.alimentame.POST.Publicar;
 import cl.telematica.android.alimentame.Presenters.ConectionPresentersImpl;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
 import cl.telematica.android.alimentame.Presenters.GoogleApi;
+import cl.telematica.android.alimentame.servicios.ServiceUpdate;
+import cl.telematica.android.alimentame.servicios.TransferGoogleApi;
 
 /**
  * Demonstrates how to create and remove geofences using the GeofencingApi. Uses an IntentService
@@ -103,8 +85,7 @@ public class MainActivity extends AppCompatActivity{
         agregarZona = (Button) findViewById(R.id.agregar);
         mGeofenceList = new ArrayList<Geofence>();
         mGeofencePendingIntent = null;
-        googleApi = new GoogleApi(mGoogleApiClient,this,mGeofencePendingIntent,mGeofenceList,mRemoveGeofencesButton,mAddGeofencesButton);
-        googleApi.setButtonsEnabledState();
+        googleApi = new GoogleApi(mGoogleApiClient,getApplicationContext(),mGeofencePendingIntent,mGeofenceList);
         googleApi.populateGeofenceList(Constants.BAY_AREA_LANDMARKS);
         googleApi.buildGoogleApiClient();
         area =new HashMap<String, LatLng>();
@@ -116,6 +97,10 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 conectionPresenters.makeRequest();
+                /*Intent x = new Intent(MainActivity.this,UserActivity.class);
+                List<Localizacion> a = conectionPresenters.getListado();
+                x.putExtra("hola", (Parcelable) a);
+                startActivity(x);*/
                 Toast.makeText(v.getContext(),"Actualizacion Realizada",Toast.LENGTH_SHORT).show();
 
             }
@@ -139,6 +124,11 @@ public class MainActivity extends AppCompatActivity{
                 googleApi.removeGeofences();
             }
         });
+        String hola = "funciono vieja no me importa nada";
+        Intent x = new Intent(getApplicationContext(),ServiceUpdate.class);
+        TransferGoogleApi.setGoogleApi(googleApi);
+        startService(x);
+
     }
 
 

@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cl.telematica.android.alimentame.Constants;
-import cl.telematica.android.alimentame.GeofenceErrorMessages;
-import cl.telematica.android.alimentame.GeofenceTransitionsIntentService;
 import cl.telematica.android.alimentame.R;
 
 /**
@@ -36,7 +34,7 @@ public class GoogleApi implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
 
     public GoogleApiClient mGoogleApiClient;
-    private Activity activity;
+    private Context activity;
     private static final String TAG = "MainActivity";
     public boolean mGeofencesAdded;
     private SharedPreferences mSharedPreferences;
@@ -45,16 +43,16 @@ public class GoogleApi implements
     private Button mAddGeofencesButton;
     private Button mRemoveGeofencesButton;
 
-    public GoogleApi(GoogleApiClient mGoogleApiClient, Activity activity,
-                     PendingIntent mGeofencePendingIntent,ArrayList<Geofence> mGeofenceList,
-                     Button mRemoveGeofencesButton,Button mAddGeofencesButton){
+    public GoogleApi(GoogleApiClient mGoogleApiClient, Context activity,
+                     PendingIntent mGeofencePendingIntent,ArrayList<Geofence> mGeofenceList/*,
+                     Button mRemoveGeofencesButton,Button mAddGeofencesButton*/){
         this.mGoogleApiClient=mGoogleApiClient;
         this.activity=activity;
         this.mGeofencePendingIntent=mGeofencePendingIntent;
         this.mGeofenceList = mGeofenceList;
-        this.mAddGeofencesButton=mAddGeofencesButton;
-        this.mRemoveGeofencesButton=mRemoveGeofencesButton;
-        this.mSharedPreferences= activity.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+        //this.mAddGeofencesButton=mAddGeofencesButton;
+        //this.mRemoveGeofencesButton=mRemoveGeofencesButton;
+        this.mSharedPreferences= this.activity.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
         mGeofencesAdded = mSharedPreferences.getBoolean(Constants.GEOFENCES_ADDED_KEY,false);
 
     }
@@ -93,7 +91,8 @@ public class GoogleApi implements
 
             // Update the UI. Adding geofences enables the Remove Geofences button, and removing
             // geofences enables the Add Geofences button.
-            setButtonsEnabledState();
+            System.out.println(mGeofencesAdded);
+            //setButtonsEnabledState();
 
             Toast.makeText(
                     activity,
@@ -109,6 +108,13 @@ public class GoogleApi implements
         }
     }
 
+    public void setButtonsEnabledState() {
+        if (mGeofencesAdded) {
+            removeGeofences();
+        } else {
+           addGeofences();
+        }
+    }
     public void populateGeofenceList(HashMap<String, LatLng> zonas) {
         for (Map.Entry<String, LatLng> entry : zonas.entrySet()) {
 
@@ -199,15 +205,7 @@ public class GoogleApi implements
         // Return a GeofencingRequest.
         return builder.build();
     }
-    public void setButtonsEnabledState() {
-        if (mGeofencesAdded) {
-            mAddGeofencesButton.setEnabled(false);
-            mRemoveGeofencesButton.setEnabled(true);
-        } else {
-            mAddGeofencesButton.setEnabled(true);
-            mRemoveGeofencesButton.setEnabled(false);
-        }
-    }
+
 
 
 

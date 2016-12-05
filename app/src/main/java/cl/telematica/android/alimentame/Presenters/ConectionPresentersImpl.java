@@ -1,9 +1,10 @@
 package cl.telematica.android.alimentame.Presenters;
 
 import android.app.Activity;
-import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,12 +14,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -28,14 +23,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import cl.telematica.android.alimentame.Constants;
-import cl.telematica.android.alimentame.GeofenceTransitionsIntentService;
-import cl.telematica.android.alimentame.Localizacion;
-import cl.telematica.android.alimentame.Peticiones;
+import cl.telematica.android.alimentame.MainActivity;
+import cl.telematica.android.alimentame.Models.HttpServerConnection;
+import cl.telematica.android.alimentame.Models.Localizacion;
+import cl.telematica.android.alimentame.Models.Peticiones;
+import cl.telematica.android.alimentame.Models.UIAdapter;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
-import cl.telematica.android.alimentame.R;
 
 /**
  * Created by gerson on 29-11-16.
@@ -48,6 +42,10 @@ public class ConectionPresentersImpl implements ConectionPresenters{
     private RequestQueue requestQueue;
     private Peticiones peticion;
     private GoogleApi googleApi;
+    static private List<Localizacion> lista;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+
     public ConectionPresentersImpl(View activity, Activity act,
                                    RequestQueue requestQueue, Peticiones peticion, GoogleApi googleApi){
     this.activity=activity;
@@ -57,6 +55,12 @@ public class ConectionPresentersImpl implements ConectionPresenters{
         this.googleApi=googleApi;
         area =new HashMap<String, LatLng>();
     }
+    public ConectionPresentersImpl(Activity activity,RecyclerView recyclerView){
+        this.recyclerView=recyclerView;
+        this.act = activity;
+    }
+
+
     @Override
     public void makeRequest() {
         String url = "http://alimentame-multimedios.esy.es/obtener_coordenadas.php";
@@ -110,7 +114,7 @@ public class ConectionPresentersImpl implements ConectionPresenters{
         }
     }
 
-    @Override
+   @Override
     public void onPreStartConnection() {
         act.setProgressBarIndeterminateVisibility(true);
     }
@@ -139,6 +143,84 @@ public class ConectionPresentersImpl implements ConectionPresenters{
             requestQueue.add(request);
         }
     }
+
+    @Override
+    public List<Localizacion> getListado() {
+        return lista;
+    }
+
+    @Override
+    public AsyncTask<Void, Void, String> Extraerdatos() {
+        AsyncTask<Void,Void,String> task = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                String repositorios = new HttpServerConnection().
+                        connectToServer("http://alimentame-multimedios.esy.es/obtener_productos.php", 15000);
+                return repositorios;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                System.out.println(s);
+                //ConnectarAdapter(s);
+                List<Localizacion> lista = getproducto(s);
+                for(int i=0;i<lista.size();i++){
+                    String producto = lista.get(i).getNombre();
+                    System.out.println(lista.get(i).getLatitud());
+                    area.put(producto,
+                            new LatLng(lista.get(i).getLatitud(),lista.get(i).getLongitud()));
+
+                }
+                if(!area.isEmpty()){
+                    System.out.println(area.isEmpty());
+                    googleApi.populateGeofenceList(area);
+                    googleApi.removeGeofences();
+                    googleApi.addGeofences();
+                }
+            }
+        };
+        return task;
+    }
+
+
+    public void setLista(List<Localizacion> list){
+        lista=list;
+    }
+
+    public void ConnectarAdapter(String result){
+        if (result != null) {
+            this.adapter = new UIAdapter(getproducto(result), act);
+            recyclerView.setAdapter(adapter);
+        }
+
+    }
+    List<Localizacion> getproducto(String Result) {
+        List<Localizacion> listadatos = new ArrayList<Localizacion>();
+        try {
+            JSONArray lista = new JSONArray(Result);
+
+            int size = lista.length();
+            for (int i = 0; i < size; i++) {
+                Localizacion dt = new Localizacion();
+                JSONObject objeto = lista.getJSONObject(i);
+
+                dt.setNombre(objeto.getString("Nombre"));
+                dt.setDescripcion(objeto.getString("Descripcion"));
+                dt.setImagen(objeto.getString("Imagen"));
+                dt.setPrecio(objeto.getString("Precio"));
+                dt.setLatitud(objeto.getDouble("Latitud"));
+                dt.setLongitud(objeto.getDouble("Longitud"));
+                //dt.setStates(objeto.getBoolean("state"));
+
+                listadatos.add(dt);
+            }
+            return listadatos;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return listadatos;
+        }
+    }
+
 
 
 

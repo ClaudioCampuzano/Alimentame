@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cl.telematica.android.alimentame;
+package cl.telematica.android.alimentame.Presenters;
 
 /**
  * Created by Claudio on 07-10-2016.
@@ -38,6 +38,9 @@ import com.google.android.gms.location.GeofencingEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cl.telematica.android.alimentame.MainActivity;
+import cl.telematica.android.alimentame.R;
 
 /**
  * Listener for geofence transition changes.
