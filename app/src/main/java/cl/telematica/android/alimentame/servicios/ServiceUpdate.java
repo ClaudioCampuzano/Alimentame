@@ -69,7 +69,7 @@ public class ServiceUpdate extends Service {
             }
         };
 
-        timer.scheduleAtFixedRate(timerTask, 0, 60000);
+        timer.scheduleAtFixedRate(timerTask, 0, 300000);
 
         return START_NOT_STICKY;
     }

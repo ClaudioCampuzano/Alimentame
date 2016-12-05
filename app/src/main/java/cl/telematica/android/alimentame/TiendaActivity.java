@@ -22,6 +22,6 @@ public class TiendaActivity extends AppCompatActivity {
         layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
         conectionPresenters = new ConectionPresentersImpl(this,recyclerView);
-        conectionPresenters.Extraerdatos().execute();
+        conectionPresenters.ListaTienda().execute();
     }
 }

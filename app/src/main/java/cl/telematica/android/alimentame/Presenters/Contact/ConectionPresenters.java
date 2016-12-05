@@ -26,4 +26,5 @@ public interface ConectionPresenters {
     List<Localizacion> getListado();
     AsyncTask<Void, Void, String> Extraerdatos();
     void ConnectarAdapter(String result);
+    AsyncTask<Void, Void, String> ListaTienda();
 }

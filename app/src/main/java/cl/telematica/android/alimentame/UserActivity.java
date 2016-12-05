@@ -21,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -34,23 +35,16 @@ import cl.telematica.android.alimentame.POST.Publicar;
 import cl.telematica.android.alimentame.Presenters.ConectionPresentersImpl;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
 import cl.telematica.android.alimentame.Presenters.GoogleApi;
+import cl.telematica.android.alimentame.servicios.TransferGoogleApi;
 
 public class UserActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Button ver;
     GPSTracker gps;
-    protected GoogleApiClient mGoogleApiClient;
-    protected ArrayList<Geofence> mGeofenceList;
-    private PendingIntent mGeofencePendingIntent;
-    private Button mAddGeofencesButton;
-    private Button mRemoveGeofencesButton;
-    private HashMap<String,LatLng> area;
-    private RequestQueue requestQueue;
-    private Peticiones peticion;
     private ConectionPresenters conectionPresenters;
     private GoogleApi googleApi;
-    View activity;
+
 
 
 
@@ -59,18 +53,9 @@ public class UserActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         ver= (Button)findViewById(R.id.button4);
-        mGeofenceList = new ArrayList<Geofence>();
-        /*mGeofencePendingIntent = null;
-        mRemoveGeofencesButton=ver;
-        mAddGeofencesButton=ver;
-        googleApi = new GoogleApi(mGoogleApiClient,this,mGeofencePendingIntent,mGeofenceList,mRemoveGeofencesButton,mAddGeofencesButton);
-        googleApi.setButtonsEnabledState();
-        googleApi.populateGeofenceList(Constants.BAY_AREA_LANDMARKS);
-        googleApi.buildGoogleApiClient();
-        peticion = Peticiones.getInstance(this.getApplicationContext());
-        requestQueue = peticion.getRequestQueue();
-        conectionPresenters = new ConectionPresentersImpl(activity,this,
-                requestQueue,peticion,googleApi);*/
+        googleApi = TransferGoogleApi.getGoogleApi();
+        conectionPresenters = TransferGoogleApi.getConectionPresenters();
+
 
 
 
@@ -128,11 +113,11 @@ public class UserActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMinZoomPreference((float) 17);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Tu estas aqui!"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-       /* for (int i=0;i<conectionPresenters.getListado().size();i++) {
-            Localizacion objeto = conectionPresenters.getListado().get(i);
+       for (int i=0;i<TransferGoogleApi.getLista().size();i++) {
+            Localizacion objeto = TransferGoogleApi.getLista().get(i);
             LatLng nuevo = new LatLng(objeto.getLatitud(),objeto.getLongitud());
-            mMap.addMarker(new MarkerOptions().position(nuevo).title(objeto.getVendedor()));
-        }*/
+            mMap.addMarker(new MarkerOptions().position(nuevo).title(objeto.getVendedor()).icon(BitmapDescriptorFactory.fromResource(R.drawable.open)));
+        }
 
 
     }

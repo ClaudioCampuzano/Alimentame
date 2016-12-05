@@ -8,63 +8,84 @@
     tools:context="cl.telematica.android.alimentame.MainActivity"
     android:background="@drawable/blackground"
     android:id="@+id/drawer_layout">
-<RelativeLayout
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <Button
-        android:text="@string/remove_geofences"
-        android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/remove_geofences_button"
-        tools:ignore="RelativeOverlap,UnknownId"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:gravity="center"
+        android:layout_weight="1">
+        <ImageView android:id="@+id/loginLogo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/iconoapp"
+            android:maxHeight="200dp"
+            android:scaleType="fitCenter"
+            tools:ignore="ContentDescription"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/signinLinear"
+        android:layout_weight="4"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:weightSum="7">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="4">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/signinUser"
+                android:hint="Username"
+                android:imeActionLabel="next"
+                android:inputType="textEmailAddress"
+                android:textColor="#fff"
+                android:background="#d2bdbdbd"
+                android:padding="4dp"
+                android:layout_marginBottom="10dp"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/signinPass"
+                android:hint="Password"
+                android:imeActionLabel="next"
+                android:inputType="textPassword|textNoSuggestions"
+                android:textColor="#ffffff"
+                android:background="#d2bdbdbd"
+                android:padding="4dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/signinButton"
+                android:hint="Log In"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Sign Up"
+                android:background="#64dd17"
+                android:id="@+id/signUp"
+                />
+        </LinearLayout>
 
-    <Button
-        android:text="@string/add_geofences"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_geofences_button"
-        tools:ignore="UnknownId"
-        android:layout_alignBaseline="@+id/remove_geofences_button"
-        android:layout_alignBottom="@+id/remove_geofences_button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    </LinearLayout>
 
-    <Button
-        android:text="Actualizar zonas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:id="@+id/actualizar"
-        android:layout_below="@+id/add_geofences_button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp" />
-
-    <Button
-        android:text="Agregar zona actual"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="11dp"
-        android:layout_marginStart="11dp"
-        android:id="@+id/agregar"
-        android:layout_alignBottom="@+id/actualizar"
-        android:layout_alignLeft="@+id/remove_geofences_button"
-        android:layout_alignStart="@+id/remove_geofences_button" />
-
-    <ImageView android:id="@+id/imagenLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/iconoapp"
-        android:maxHeight="200dp"
-        android:scaleType="fitCenter"
-        tools:ignore="ContentDescription"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-</RelativeLayout>
+</LinearLayout>
     <ListView
         android:id="@+id/list_view"
         android:layout_width="200dp"

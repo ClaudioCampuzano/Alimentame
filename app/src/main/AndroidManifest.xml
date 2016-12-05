@@ -42,7 +42,14 @@
         <service
             android:name=".servicios.ServiceUpdate"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".MenuActivity" />
+        <activity
+            android:name=".SingUpActivity"
+            android:label="@string/title_activity_sing_up"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".RegistroActivity"></activity>
     </application>
 
 </manifest>

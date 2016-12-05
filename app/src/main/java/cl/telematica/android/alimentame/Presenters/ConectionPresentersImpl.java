@@ -30,6 +30,7 @@ import cl.telematica.android.alimentame.Models.Localizacion;
 import cl.telematica.android.alimentame.Models.Peticiones;
 import cl.telematica.android.alimentame.Models.UIAdapter;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
+import cl.telematica.android.alimentame.servicios.TransferGoogleApi;
 
 /**
  * Created by gerson on 29-11-16.
@@ -161,22 +162,25 @@ public class ConectionPresentersImpl implements ConectionPresenters{
 
             @Override
             protected void onPostExecute(String s) {
-                System.out.println(s);
-                //ConnectarAdapter(s);
                 List<Localizacion> lista = getproducto(s);
-                for(int i=0;i<lista.size();i++){
-                    String producto = lista.get(i).getNombre();
-                    System.out.println(lista.get(i).getLatitud());
-                    area.put(producto,
-                            new LatLng(lista.get(i).getLatitud(),lista.get(i).getLongitud()));
+                TransferGoogleApi.setLista(lista);
+            }
+        };
+        return task;
+    }
+    @Override
+    public AsyncTask<Void, Void, String> ListaTienda() {
+        AsyncTask<Void,Void,String> task = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                String repositorios = new HttpServerConnection().
+                        connectToServer("http://alimentame-multimedios.esy.es/obtener_productos.php", 15000);
+                return repositorios;
+            }
 
-                }
-                if(!area.isEmpty()){
-                    System.out.println(area.isEmpty());
-                    googleApi.populateGeofenceList(area);
-                    googleApi.removeGeofences();
-                    googleApi.addGeofences();
-                }
+            @Override
+            protected void onPostExecute(String s) {
+                ConnectarAdapter(s);
             }
         };
         return task;

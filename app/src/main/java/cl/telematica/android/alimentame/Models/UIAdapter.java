@@ -85,6 +85,7 @@ public class UIAdapter extends RecyclerView.Adapter<UIAdapter.ViewHolder> {
             holder.TextDescrip.setText(dato.getDescripcion());
         }
         holder.Textprecio.setText(dato.getPrecio());
+        holder.imagen.getResources().getDrawable(R.drawable.tocomple);
         //downloadFile(dato.getImagen(),holder.imagen);
 
     }

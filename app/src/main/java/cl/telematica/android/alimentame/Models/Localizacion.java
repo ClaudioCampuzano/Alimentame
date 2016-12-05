@@ -1,10 +1,13 @@
 package cl.telematica.android.alimentame.Models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by gerson on 23-10-16.
  */
 
-public class Localizacion {
+public class Localizacion implements Parcelable {
     private double latitud;
     private double longitud;
     private String producto;
@@ -86,4 +89,49 @@ public class Localizacion {
     public void setVendedor(String vendedor) {
         this.vendedor = vendedor;
     }
+    public Localizacion(){
+
+    }
+    public Localizacion(Parcel in) {
+        latitud = in.readDouble();
+        longitud = in.readDouble();
+        producto = in.readString();
+        vendedor = in.readString();
+        nombre = in.readString();
+        precio = in.readString();
+        descripcion = in.readString();
+        imagen = in.readString();
+        states = in.readByte() != 0x00;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(latitud);
+        dest.writeDouble(longitud);
+        dest.writeString(producto);
+        dest.writeString(vendedor);
+        dest.writeString(nombre);
+        dest.writeString(precio);
+        dest.writeString(descripcion);
+        dest.writeString(imagen);
+        dest.writeByte((byte) (states ? 0x01 : 0x00));
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Localizacion> CREATOR = new Parcelable.Creator<Localizacion>() {
+        @Override
+        public Localizacion createFromParcel(Parcel in) {
+            return new Localizacion(in);
+        }
+
+        @Override
+        public Localizacion[] newArray(int size) {
+            return new Localizacion[size];
+        }
+    };
 }
