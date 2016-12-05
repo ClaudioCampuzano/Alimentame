@@ -73,7 +73,7 @@ public class LogInActivity extends AppCompatActivity {
                 pass = passT.getText().toString();
                 try {
                     String hpass = bin2hex(digest(pass));
-                    Toast.makeText(LogInActivity.this, hpass, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LogInActivity.this, hpass, Toast.LENGTH_LONG).show();
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
@@ -91,9 +91,10 @@ public class LogInActivity extends AppCompatActivity {
                                 }
                             }
                             );
-                            Toast.makeText(LogInActivity.this, "La respuesta es: "+ response, Toast.LENGTH_SHORT).show();
-                            if(response != "false"){
-                                Toast.makeText(LogInActivity.this, ":S", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(LogInActivity.this, "La respuesta es: "+ response, Toast.LENGTH_LONG).show();
+
+                            if(!response.equals("false")){
+                                //Toast.makeText(LogInActivity.this, ":S -> "+response, Toast.LENGTH_SHORT).show();
                                 SharedPreferences.Editor editor = sharedpreferences.edit();
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
@@ -101,12 +102,10 @@ public class LogInActivity extends AppCompatActivity {
                                     editor.putString("hpass", hashPass);
                                     editor.putString("desc", (String) jsonObject.get("desc"));
                                     editor.commit();
-                                    Toast.makeText(LogInActivity.this, "k wea", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(LogInActivity.this, MainActivity.class);
                                     startActivity(intent);
 
                                 } catch (JSONException e) {
-                                    Toast.makeText(LogInActivity.this, "puta la puta qla", Toast.LENGTH_SHORT).show();
                                     e.printStackTrace();
                                 }
                                 /*
