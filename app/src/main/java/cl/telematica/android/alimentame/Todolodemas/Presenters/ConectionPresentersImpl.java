@@ -1,9 +1,6 @@
-package cl.telematica.android.alimentame.Presenters;
+package cl.telematica.android.alimentame.Todolodemas.Presenters;
 
 import android.app.Activity;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,12 +10,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -28,14 +19,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import cl.telematica.android.alimentame.Constants;
-import cl.telematica.android.alimentame.GeofenceTransitionsIntentService;
-import cl.telematica.android.alimentame.Localizacion;
-import cl.telematica.android.alimentame.Peticiones;
-import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
-import cl.telematica.android.alimentame.R;
+import cl.telematica.android.alimentame.Todolodemas.Presenters.Contact.ConectionPresenters;
 
 /**
  * Created by gerson on 29-11-16.

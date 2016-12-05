@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cl.telematica.android.alimentame.MainActivity"
+    tools:context="cl.telematica.android.alimentame.Todolodemas.Presenters.MainActivity"
     android:background="@drawable/blackground"
     android:id="@+id/drawer_layout">
 <RelativeLayout

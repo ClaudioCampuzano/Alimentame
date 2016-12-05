@@ -5,24 +5,36 @@ package cl.telematica.android.alimentame.POST.Models;
  */
 
 public class Datos {
-    private String name;
-    private String description;
-    private String updated_at;
-    private String html_url;
+    private String nombre;
+    private String descripcion;
+    private String precio;
+    private String state;
+    private String latitud;
+    private String longitud;
+    private String imagen;
 
-    public Datos(String name, String description, String updated_at, String html_url){
-        this.setName(name);
-        this.setDescription(description);
-        this.setUpdated_at(updated_at);
-        this.setHtml_url(html_url);
+    public Datos(String nombre, String descripcion, String precio, String state, String latitud, String longitud, String imagen){
+        this.setNombre(nombre);
+        this.setDescripcion(descripcion);
+        this.setPrecio(precio);
+        this.setState(state);
+        this.setLatitud(latitud);
+        this.setLongitud(longitud);
+        this.setImagen(imagen);
     }
-    public String getName(){return name;}
-    public String getDescription(){return description;}
-    public String getUpdated_at() {return updated_at;}
-    public String getHtml_url(){return html_url;}
+    public String getNombre(){return nombre;}
+    public String getDescripcion(){return descripcion;}
+    public String getPrecio() {return precio;}
+    public String getState(){return state;}
+    public String getLatitud(){return latitud;}
+    public String getLongitud(){return longitud;}
+    public String getImagen() {return imagen;}
 
-    public void setName(String name){this.name=name;}
-    public void setDescription(String description) {this.description=description;}
-    public void setUpdated_at(String updated_at)  {this.updated_at=updated_at;}
-    public void setHtml_url(String html_url){this.html_url=html_url;}
+    public void setNombre(String nombre){this.nombre=nombre;}
+    public void setDescripcion(String descripcion) {this.descripcion=descripcion;}
+    public void setPrecio(String precio)  {this.precio=precio;}
+    public void setState(String state){this.state=state;}
+    public void setLatitud(String latitud){this.latitud=latitud;}
+    public void setLongitud(String longitud) {this.longitud=longitud;}
+    public void setImagen(String imagen)  {this.imagen=imagen;}
 }

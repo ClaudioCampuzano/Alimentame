@@ -1,17 +1,16 @@
-package cl.telematica.android.alimentame.POST;
+package cl.telematica.android.alimentame.POST.Models;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import java.util.ArrayList;
 
-import cl.telematica.android.alimentame.POST.Models.Datos;
 import cl.telematica.android.alimentame.R;
 
 /**
@@ -23,7 +22,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     Context ctx;
 
     public RecyclerAdapter(ArrayList<Datos> datos, Context ctx){
-
         this.datos=datos;
         this.ctx = ctx;
     }
@@ -39,13 +37,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-
-        String yyyyMMdd = datos.get(position).getUpdated_at().split("T")[0];
-        String Fecha = yyyyMMdd.split("-")[2]+"-"+yyyyMMdd.split("-")[1]+"-"+yyyyMMdd.split("-")[0];
-
-        holder.Name.setText(datos.get(position).getName()+"\n");
-        holder.Description.setText(description(datos.get(position).getDescription()));
-        holder.Updated_at.setText("Última actualización: "+Fecha);
+        holder.Nombre.setText(datos.get(position).getNombre()+"\n");
+        holder.Descripcion.setText(description(datos.get(position).getDescripcion()));
+        holder.Precio.setText(datos.get(position).getPrecio());
     }
     public String description (String description){
         if (description == "null")
@@ -60,7 +54,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView Name,Description,Updated_at;
+        TextView Nombre,Descripcion,Precio;
         ArrayList<Datos> datos = new ArrayList<Datos>();
         Context ctx;
 
@@ -70,18 +64,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             this.ctx = ctx;
 
             itemView.setOnClickListener(this);
-            Name = (TextView) itemView.findViewById(R.id.prod_nombre);
-            Description = (TextView) itemView.findViewById(R.id.prod_descripcion);
-            Updated_at = (TextView) itemView.findViewById(R.id.prod_precio);
+            Nombre = (TextView) itemView.findViewById(R.id.prod_nombre);
+            Descripcion = (TextView) itemView.findViewById(R.id.prod_descripcion);
+            Precio = (TextView) itemView.findViewById(R.id.prod_precio);
         }
 
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
-            Datos datos = this.datos.get(position);
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(datos.getHtml_url()));
-            this.ctx.startActivity(intent);
+            Toast.makeText(ctx,"Gracias por hacer click",Toast.LENGTH_LONG).show();
         }
     }
 }

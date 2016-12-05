@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +14,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Todolodemas.Presenters.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,10 +22,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".GeofenceTransitionsIntentService" />
+        <service android:name=".Todolodemas.Presenters.GeofenceTransitionsIntentService" />
 
         <activity android:name=".POST.Publicar" />
-        <activity android:name=".POST.Listar_Prod"></activity>
+        <activity android:name=".POST.VerProductos"></activity>
     </application>
 
 </manifest>

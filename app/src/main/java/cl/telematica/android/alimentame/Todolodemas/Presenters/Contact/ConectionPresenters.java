@@ -1,18 +1,12 @@
-package cl.telematica.android.alimentame.Presenters.Contact;
-
-import android.app.PendingIntent;
-import android.view.View;
+package cl.telematica.android.alimentame.Todolodemas.Presenters.Contact;
 
 import com.android.volley.Request;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 
-import java.util.HashMap;
 import java.util.List;
 
-import cl.telematica.android.alimentame.Localizacion;
+import cl.telematica.android.alimentame.Todolodemas.Presenters.Localizacion;
 
 /**
  * Created by gerson on 29-11-16.

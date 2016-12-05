@@ -1,4 +1,4 @@
-package cl.telematica.android.alimentame.Presenters;
+package cl.telematica.android.alimentame.Todolodemas.Presenters;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -23,9 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import cl.telematica.android.alimentame.Constants;
-import cl.telematica.android.alimentame.GeofenceErrorMessages;
-import cl.telematica.android.alimentame.GeofenceTransitionsIntentService;
 import cl.telematica.android.alimentame.R;
 
 /**
