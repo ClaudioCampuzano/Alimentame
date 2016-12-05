@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cl.telematica.android.alimentame.MainActivity"
-    android:background="@drawable/blackground"
+    android:background="@drawable/app_background"
     android:id="@+id/drawer_layout">
 <RelativeLayout
     android:layout_width="match_parent"
@@ -54,6 +54,12 @@
         android:layout_alignBottom="@+id/actualizar"
         android:layout_alignLeft="@+id/remove_geofences_button"
         android:layout_alignStart="@+id/remove_geofences_button" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LogOut"
+        android:id="@+id/logOut"
+        />
 
     <ImageView android:id="@+id/imagenLogo"
         android:layout_width="wrap_content"

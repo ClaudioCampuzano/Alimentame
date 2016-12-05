@@ -1,9 +1,12 @@
 package cl.telematica.android.alimentame;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -17,14 +20,10 @@ import com.google.android.gms.location.GeofencingApi;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.maps.model.LatLng;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import cl.telematica.android.alimentame.LogIn.LogInActivity;
-import cl.telematica.android.alimentame.LogIn.UsuarioLogged;
 import cl.telematica.android.alimentame.POST.Publicar;
 import cl.telematica.android.alimentame.Presenters.ConectionPresentersImpl;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
@@ -65,6 +64,11 @@ public class MainActivity extends AppCompatActivity{
     private Button mRemoveGeofencesButton;
     private Button actualizarDatos;
     private Button agregarZona;
+
+    /**** LOGIN INTERVENTION ****/
+    private Button logOutButton;
+    /**** LOGIN INTERVENTION ****/
+
     private HashMap<String,LatLng> area;
     private RequestQueue requestQueue;
     private Peticiones peticion;
@@ -72,31 +76,26 @@ public class MainActivity extends AppCompatActivity{
     private GoogleApi googleApi;
 
 
-    /*** LOG ADDITIONS ***/
-    private boolean logged;
-    private UsuarioLogged User;
-    /*** LOG ADDITIONS ***/
+
+    /**** LOGIN INTERVENTION ****/
+    //Variables para saber si se está logeado o no
+    public static final String MyPREFERENCES = "MyPrefs" ;
+
+
+    /**** LOGIN INTERVENTION ****/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-
-        /*** LOG ADITIONS ***/
-        logged = false;
-        User.setID(0);
-        Bundle bundle = getIntent().getExtras();
-        if(bundle.getString("logged") != "false"){
-            logged = true;
-            try {
-                User = new UsuarioLogged(new JSONObject(bundle.getString("logged")), bundle.getString("id"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+        /**** LOGIN INTERVENTION ****/
+        SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedpreferences.edit();
+        Toast.makeText(this, "Bienvenido: "+sharedpreferences.getString("name", "name"), Toast.LENGTH_SHORT).show();
         // Intervención para comprobar el login
-        checkLog();
-        /*** LOG ADITIONS ***/
-
+        if(sharedpreferences.getString("name", "name") == "name") {
+            checkLog();
+        }
+        /**** LOGIN INTERVENTION ****/
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -106,6 +105,11 @@ public class MainActivity extends AppCompatActivity{
         mRemoveGeofencesButton = (Button) findViewById(R.id.remove_geofences_button);
         actualizarDatos = (Button) findViewById(R.id.actualizar);
         agregarZona = (Button) findViewById(R.id.agregar);
+
+        /**** LOGIN INTERVENTION ****/
+        logOutButton = (Button)findViewById(R.id.logOut);
+        /**** LOGIN INTERVENTION ****/
+
         mGeofenceList = new ArrayList<Geofence>();
         mGeofencePendingIntent = null;
         googleApi = new GoogleApi(mGoogleApiClient,this,mGeofencePendingIntent,mGeofenceList,mRemoveGeofencesButton,mAddGeofencesButton);
@@ -144,14 +148,29 @@ public class MainActivity extends AppCompatActivity{
                 googleApi.removeGeofences();
             }
         });
+
+        /**** LOGIN INTERVENTION ****/
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editor.clear();
+                editor.commit();
+                Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+                startActivity(intent);
+            }
+        });
+        /**** LOGIN INTERVENTION ****/
     }
 
 
     @Override
     protected void onStart() {
-        /*** LOG ADDITIONS ***/
-        //checkLog();
-        /*** LOG ADDITIONS ***/
+        /**** LOGIN INTERVENTION ****/
+       // if(!checked) {
+         //   checkLog();
+        //}
+        /**** LOGIN INTERVENTION ****/
+
         super.onStart();
         googleApi.mGoogleApiClient.connect();
         Toast.makeText(this,"onStart",Toast.LENGTH_LONG);
@@ -164,19 +183,47 @@ public class MainActivity extends AppCompatActivity{
         Toast.makeText(this,"onStop",Toast.LENGTH_LONG);
     }
 
-    /*** LOG ADDITIONS ***/
+    /**** LOGIN INTERVENTION ****/
     public void checkLog(){
-        if (!logged){
             Intent intent = new Intent(MainActivity.this, LogInActivity.class);
             startActivity(intent);
-        }
+
     }
-    public void setUser(UsuarioLogged user) {
-        User = user;
-    }
-    public UsuarioLogged getUser() {
-        return this.User;
-    }
-    /*** LOG ADDITIONS ***/
+
+    AlertDialog.Builder builder;
+    /*public String getUserInfo(final String ID) {
+        final String n_url = "http://alimentame-multimedios.esy.es/getuser.php";
+        final String[] respuesta = new String[1];
+        StringRequest stringRequest = new StringRequest(POST, n_url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                builder.setMessage(response);
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                respuesta[0] = response;
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
+                error.printStackTrace();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id", ID);
+                return params;
+            }
+        };
+        MySingleton.getmInstance(MainActivity.this).addTorequestque(stringRequest);
+        return respuesta[0];
+
+    }*/
+    /**** LOGIN INTERVENTION ****/
+
 
 }

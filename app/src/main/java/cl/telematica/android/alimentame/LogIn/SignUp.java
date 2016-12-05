@@ -15,13 +15,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
-import cl.telematica.android.alimentame.MainActivity;
 import cl.telematica.android.alimentame.POST.MySingleton;
 import cl.telematica.android.alimentame.R;
 
@@ -31,6 +30,7 @@ public class SignUp extends AppCompatActivity {
 
     private EditText userT, passT, descT, imgT;
     private Button btn;
+    private String hashPass;
 
     String url = "http://alimentame-multimedios.esy.es/signup.php";
     AlertDialog.Builder builder;
@@ -54,10 +54,7 @@ public class SignUp extends AppCompatActivity {
                 desc = descT.getText().toString();
                 img = imgT.getText().toString();
                 try {
-                    String hpass = new String(digest(pass), "UTF-8");
-                    Toast.makeText(SignUp.this, hpass, Toast.LENGTH_SHORT).show();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                    hashPass = bin2hex(digest(pass));
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
@@ -76,12 +73,13 @@ public class SignUp extends AppCompatActivity {
                                         }
                                     }
                             );
+                            Toast.makeText(SignUp.this, "Respuesta = "+response, Toast.LENGTH_LONG).show();
                             if(response == "true"){
-                                Intent intent = new Intent(SignUp.this, MainActivity.class);
-                                intent.putExtra("logged", response);
+                                Intent intent = new Intent(SignUp.this, LogInActivity.class);
                                 startActivity(intent);
+                            }else {
+                                Toast.makeText(SignUp.this, "Nombre de usuario en uso", Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(SignUp.this, "Nombre de usuario en uso", Toast.LENGTH_SHORT).show();
                             //Toast.makeText(v.getContext(), "Insercion exitosa", Toast.LENGTH_LONG).show();
                             //restartFirstActivity();
                         }
@@ -95,16 +93,15 @@ public class SignUp extends AppCompatActivity {
                         @Override
                         protected Map<String, String> getParams() throws AuthFailureError {
                             Map<String, String> params = new HashMap<String, String>();
+                            try {
+                                params.put("pass", bin2hex(digest(pass)));
+                            } catch (NoSuchAlgorithmException e) {
+                                Toast.makeText(SignUp.this, "D:?", Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
+                            }
                             params.put("user", user);
                             params.put("desc", desc);
                             params.put("img", img);
-                            try {
-                                params.put("pass", new String(digest(pass), "UTF-8"));
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            } catch (NoSuchAlgorithmException e) {
-                                e.printStackTrace();
-                            }
                             return params;
                         }
                     };
@@ -124,5 +121,9 @@ public class SignUp extends AppCompatActivity {
         digester.update(stringBytes, 0, stringBytes.length);
 
         return digester.digest();
+    }
+
+    static String bin2hex(byte[] data) {
+        return String.format("%0" + (data.length*2) + "X", new BigInteger(1, data));
     }
 }
