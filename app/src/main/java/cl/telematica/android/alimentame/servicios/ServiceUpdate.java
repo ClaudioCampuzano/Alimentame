@@ -30,22 +30,12 @@ public class ServiceUpdate extends Service {
     private static final String TAG = ServiceUpdate.class.getSimpleName();
     TimerTask timerTask;
     GoogleApi googleApi;
-    private RequestQueue requestQueue;
-    private Peticiones peticion;
     private ConectionPresenters conectionPresenters;
-    private View view;
-    private Context context;
-    Activity activity;
+
 
 
     public ServiceUpdate() {
         super();
-    }
-    public ServiceUpdate(Context context, String nada){
-
-        super();
-        this.context=context;
-
     }
 
     @Override
@@ -57,8 +47,6 @@ public class ServiceUpdate extends Service {
      @Override
      public void onCreate(){
          Log.d(TAG,"Servicio creado...");
-         peticion = Peticiones.getInstance(context);
-         requestQueue = peticion.getRequestQueue();
 
 
 
@@ -67,14 +55,14 @@ public class ServiceUpdate extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         googleApi = TransferGoogleApi.getGoogleApi();
+        conectionPresenters = TransferGoogleApi.getConectionPresenters();
         Log.d(TAG, "Servicio iniciado...");
-        conectionPresenters = new ConectionPresentersImpl(view,activity,requestQueue,peticion,googleApi);
         Timer timer = new Timer();
 
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                conectionPresenters.Extraerdatos().execute();
+                conectionPresenters.makeRequest();
 
                 System.out.println("actulizando..");
 

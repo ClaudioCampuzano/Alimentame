@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity{
         String hola = "funciono vieja no me importa nada";
         Intent x = new Intent(getApplicationContext(),ServiceUpdate.class);
         TransferGoogleApi.setGoogleApi(googleApi);
+        TransferGoogleApi.setConectionPresenters(conectionPresenters);
         startService(x);
 
     }
