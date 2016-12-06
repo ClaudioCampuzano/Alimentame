@@ -74,6 +74,7 @@ public class SignUp extends AppCompatActivity {
                                     }
                             );
                             Toast.makeText(SignUp.this, "Respuesta = "+response, Toast.LENGTH_LONG).show();
+                            Toast.makeText(SignUp.this, String.valueOf(response.equals("true")), Toast.LENGTH_SHORT).show();
                             if(response.equals("true")){
                                 Toast.makeText(SignUp.this, "PLP", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(SignUp.this, LogInActivity.class);
