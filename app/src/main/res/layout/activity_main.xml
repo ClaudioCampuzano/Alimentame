@@ -8,84 +8,101 @@
     tools:context="cl.telematica.android.alimentame.MainActivity"
     android:background="@drawable/blackground"
     android:id="@+id/drawer_layout">
-<LinearLayout
+<RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LogOut"
+        android:id="@+id/logOut"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_marginRight="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="22dp"
+        android:id="@+id/imageView2"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_weight="1">
-        <ImageView android:id="@+id/loginLogo"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@drawable/iconoapp"
-            android:maxHeight="200dp"
-            android:scaleType="fitCenter"
-            tools:ignore="ContentDescription"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/signinLinear"
-        android:layout_weight="4"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:weightSum="7">
-        <LinearLayout
-            android:layout_width="match_parent"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:text="BIenvenido "
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_weight="4">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/signinUser"
-                android:hint="Username"
-                android:imeActionLabel="next"
-                android:inputType="textEmailAddress"
-                android:textColor="#fff"
-                android:background="#d2bdbdbd"
-                android:padding="4dp"
-                android:layout_marginBottom="10dp"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/signinPass"
-                android:hint="Password"
-                android:imeActionLabel="next"
-                android:inputType="textPassword|textNoSuggestions"
-                android:textColor="#ffffff"
-                android:background="#d2bdbdbd"
-                android:padding="4dp"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/signinButton"
-                android:hint="Log In"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/textView"
+            android:textSize="24sp"
+            android:textColor="?android:attr/textColorPrimaryNoDisable"
+            android:textStyle="normal|bold"
+            android:layout_below="@+id/imageView2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="36dp"
+            android:layout_marginStart="36dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="1">
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Sign Up"
-                android:background="#64dd17"
-                android:id="@+id/signUp"
-                />
-        </LinearLayout>
+            android:id="@+id/usuario"
+            android:textSize="18sp"
+            android:layout_alignBottom="@+id/textView"
+            android:layout_toRightOf="@+id/textView"
+            android:layout_toEndOf="@+id/textView"
+            android:layout_marginLeft="35dp"
+            android:layout_marginStart="35dp"
+            android:layout_weight="1"
+            android:textStyle="normal|bold"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
     </LinearLayout>
 
-</LinearLayout>
+    <Button
+        android:text="@string/add_geofences"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_geofences_button"
+        tools:ignore="UnknownId"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Que tengo cerca?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/actualizar"
+        android:layout_marginBottom="25dp"
+        android:layout_above="@+id/agregar"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Crear TIenda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/agregar"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
     <ListView
         android:id="@+id/list_view"
         android:layout_width="200dp"

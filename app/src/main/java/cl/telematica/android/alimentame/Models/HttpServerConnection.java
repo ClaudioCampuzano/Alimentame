@@ -10,7 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Created by gerson on 04-12-16.
+ * Created by gerson on 06-12-16.
  */
 
 public class HttpServerConnection {public String connectToServer(String myUrl, int timeOut){

@@ -31,5 +31,4 @@
     <string name="producto">Producto</string>
     <string name="insertar">Publicar</string>
     <string name="title_activity_user">Map</string>
-    <string name="title_activity_sing_up">SingUpActivity</string>
 </resources>

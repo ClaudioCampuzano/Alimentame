@@ -22,6 +22,9 @@
         <service android:name=".Presenters.GeofenceTransitionsIntentService" />
 
         <activity android:name=".POST.Publicar" />
+        <activity android:name=".LogIn.LogInActivity" />
+        <activity android:name=".LogIn.SignUp" />
+        <activity android:name=".TiendaActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -36,20 +39,11 @@
 
         <activity
             android:name=".UserActivity"
-            android:label="@string/title_activity_user" />
-        <activity android:name=".TiendaActivity" />
-
+            android:label="@string/title_activity_user"></activity>
         <service
-            android:name=".servicios.ServiceUpdate"
+            android:name=".Servicio.ServiceUpdate"
             android:enabled="true"
             android:exported="true" />
-
-        <activity android:name=".MenuActivity" />
-        <activity
-            android:name=".SingUpActivity"
-            android:label="@string/title_activity_sing_up"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".RegistroActivity"></activity>
     </application>
 
 </manifest>

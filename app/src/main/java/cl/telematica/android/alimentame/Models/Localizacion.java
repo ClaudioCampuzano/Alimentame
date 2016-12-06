@@ -16,13 +16,13 @@ public class Localizacion implements Parcelable {
     private String precio;
     private String descripcion;
     private String imagen;
-    private boolean states;
+    private int states;
 
-    public boolean isStates() {
+    public int isStates() {
         return states;
     }
 
-    public void setStates(boolean states) {
+    public void setStates(int states) {
         this.states = states;
     }
 
@@ -101,7 +101,7 @@ public class Localizacion implements Parcelable {
         precio = in.readString();
         descripcion = in.readString();
         imagen = in.readString();
-        states = in.readByte() != 0x00;
+        states = in.readInt();
     }
 
     @Override
@@ -119,7 +119,7 @@ public class Localizacion implements Parcelable {
         dest.writeString(precio);
         dest.writeString(descripcion);
         dest.writeString(imagen);
-        dest.writeByte((byte) (states ? 0x01 : 0x00));
+        dest.writeInt(states);
     }
 
     @SuppressWarnings("unused")

@@ -1,10 +1,8 @@
 package cl.telematica.android.alimentame.Models;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,7 +20,7 @@ import java.util.List;
 import cl.telematica.android.alimentame.R;
 
 /**
- * Created by gerson on 03-12-16.
+ * Created by gerson on 06-12-16.
  */
 
 public class UIAdapter extends RecyclerView.Adapter<UIAdapter.ViewHolder> {
@@ -117,4 +115,3 @@ public class UIAdapter extends RecyclerView.Adapter<UIAdapter.ViewHolder> {
     }
 
 }
-

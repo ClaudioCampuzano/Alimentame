@@ -1,6 +1,5 @@
 package cl.telematica.android.alimentame.Presenters;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -112,7 +111,7 @@ public class GoogleApi implements
         if (mGeofencesAdded) {
             removeGeofences();
         } else {
-           addGeofences();
+            addGeofences();
         }
     }
     public void populateGeofenceList(HashMap<String, LatLng> zonas) {

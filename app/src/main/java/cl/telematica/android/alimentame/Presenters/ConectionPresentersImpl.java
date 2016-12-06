@@ -1,8 +1,6 @@
 package cl.telematica.android.alimentame.Presenters;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,6 +12,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -24,13 +23,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import cl.telematica.android.alimentame.MainActivity;
 import cl.telematica.android.alimentame.Models.HttpServerConnection;
 import cl.telematica.android.alimentame.Models.Localizacion;
 import cl.telematica.android.alimentame.Models.Peticiones;
 import cl.telematica.android.alimentame.Models.UIAdapter;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
-import cl.telematica.android.alimentame.servicios.TransferGoogleApi;
+import cl.telematica.android.alimentame.Servicio.TransferGoogleApi;
 
 /**
  * Created by gerson on 29-11-16.
@@ -43,13 +41,12 @@ public class ConectionPresentersImpl implements ConectionPresenters{
     private RequestQueue requestQueue;
     private Peticiones peticion;
     private GoogleApi googleApi;
-    static private List<Localizacion> lista;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
 
     public ConectionPresentersImpl(View activity, Activity act,
                                    RequestQueue requestQueue, Peticiones peticion, GoogleApi googleApi){
-    this.activity=activity;
+        this.activity=activity;
         this.act = act;
         this.requestQueue = requestQueue;
         this.peticion = peticion;
@@ -64,17 +61,17 @@ public class ConectionPresentersImpl implements ConectionPresenters{
 
     @Override
     public void makeRequest() {
-        String url = "http://alimentame-multimedios.esy.es/obtener_coordenadas.php";
+        String url = "http://alimentame-multimedios.esy.es/obtener_productos.php";
         List<Localizacion> listaLocalizaciones = new ArrayList<Localizacion>();
         JsonArrayRequest request = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray jsonArray) {
                 List<Localizacion> lista = new ArrayList<Localizacion>();
                 lista = getLista(jsonArray);
+                TransferGoogleApi.setLista(lista);
                 for(int i=0;i<lista.size();i++){
-                    String vendedor = lista.get(i).getVendedor();
-                    String producto = lista.get(i).getProducto();
-                    area.put(producto,
+                    String Nombre = lista.get(i).getNombre();
+                    area.put(Nombre,
                             new LatLng(lista.get(i).getLatitud(),lista.get(i).getLongitud()));
 
                 }
@@ -102,10 +99,12 @@ public class ConectionPresentersImpl implements ConectionPresenters{
             for(int i = 0; i < size; i++){
                 Localizacion Localizacion = new Localizacion();
                 JSONObject objeto = jsonArray.getJSONObject(i);
-                Localizacion.setLatitud(objeto.getDouble("latitud"));
-                Localizacion.setLongitud(objeto.getDouble("longitud"));
-                Localizacion.setVendedor(objeto.getString("vendedor"));
-                Localizacion.setProducto(objeto.getString("producto"));
+                Localizacion.setLatitud(objeto.getDouble("Latitud"));
+                Localizacion.setLongitud(objeto.getDouble("Longitud"));
+                Localizacion.setNombre(objeto.getString("Nombre"));
+                Localizacion.setStates(objeto.getInt("state"));
+                Localizacion.setPrecio(objeto.getString("Precio"));
+                //Localizacion.setImagen(objeto.getString("Imagen"));
                 listaLocalizaciones.add(Localizacion);
             }
             return listaLocalizaciones;
@@ -115,7 +114,7 @@ public class ConectionPresentersImpl implements ConectionPresenters{
         }
     }
 
-   @Override
+    @Override
     public void onPreStartConnection() {
         act.setProgressBarIndeterminateVisibility(true);
     }
@@ -145,10 +144,6 @@ public class ConectionPresentersImpl implements ConectionPresenters{
         }
     }
 
-    @Override
-    public List<Localizacion> getListado() {
-        return lista;
-    }
 
     @Override
     public AsyncTask<Void, Void, String> Extraerdatos() {
@@ -175,26 +170,25 @@ public class ConectionPresentersImpl implements ConectionPresenters{
             protected String doInBackground(Void... voids) {
                 String repositorios = new HttpServerConnection().
                         connectToServer("http://alimentame-multimedios.esy.es/obtener_productos.php", 15000);
+
                 return repositorios;
             }
 
             @Override
             protected void onPostExecute(String s) {
                 ConnectarAdapter(s);
+                TransferGoogleApi.setLista(getproducto(s));
             }
         };
         return task;
     }
 
 
-    public void setLista(List<Localizacion> list){
-        lista=list;
-    }
-
-    public void ConnectarAdapter(String result){
+   public void ConnectarAdapter(String result){
         if (result != null) {
             this.adapter = new UIAdapter(getproducto(result), act);
             recyclerView.setAdapter(adapter);
+
         }
 
     }
@@ -210,11 +204,11 @@ public class ConectionPresentersImpl implements ConectionPresenters{
 
                 dt.setNombre(objeto.getString("Nombre"));
                 dt.setDescripcion(objeto.getString("Descripcion"));
-                dt.setImagen(objeto.getString("Imagen"));
+                //dt.setImagen(objeto.getString("Imagen"));
                 dt.setPrecio(objeto.getString("Precio"));
                 dt.setLatitud(objeto.getDouble("Latitud"));
                 dt.setLongitud(objeto.getDouble("Longitud"));
-                //dt.setStates(objeto.getBoolean("state"));
+
 
                 listadatos.add(dt);
             }

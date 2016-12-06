@@ -23,9 +23,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
 
-
-import cl.telematica.android.alimentame.servicios.ServiceUpdate;
-
 /**
  * Constantes usadas por la aplicacion.
  */
@@ -37,8 +34,6 @@ public final class Constants {
     public static final String SHARED_PREFERENCES_NAME = PACKAGE_NAME + ".SHARED_PREFERENCES_NAME";
 
     public static final String GEOFENCES_ADDED_KEY = PACKAGE_NAME + ".GEOFENCES_ADDED_KEY";
-
-
 
     /**
      * Used to set an expiration time for a geofence. After this amount of time Location Services
@@ -57,16 +52,4 @@ public final class Constants {
     static {
         BAY_AREA_LANDMARKS.put("Mi Casa", new LatLng(-33.049191, -71.400149));
     }
-
-    /**
-     * Constantes para {@link ServiceUpdate}
-     */
-    public static final String ACTION_RUN_SERVICE = "cl.telematica.memoryout.action.RUN_SERVICE";
-    public static final String ACTION_MEMORY_EXIT = "cl.telematica.memoryout.action.MEMORY_EXIT";
-
-    public static final String EXTRA_MEMORY = "cl.telematica.memoryout.extra.MEMORY";
-
-
-
-
 }

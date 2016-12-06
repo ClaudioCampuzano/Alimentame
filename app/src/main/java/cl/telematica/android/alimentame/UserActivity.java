@@ -1,8 +1,5 @@
 package cl.telematica.android.alimentame;
 
-import android.*;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -11,12 +8,8 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,17 +18,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import cl.telematica.android.alimentame.Models.Localizacion;
-import cl.telematica.android.alimentame.Models.Peticiones;
 import cl.telematica.android.alimentame.POST.GPSTracker;
-import cl.telematica.android.alimentame.POST.Publicar;
-import cl.telematica.android.alimentame.Presenters.ConectionPresentersImpl;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
 import cl.telematica.android.alimentame.Presenters.GoogleApi;
-import cl.telematica.android.alimentame.servicios.TransferGoogleApi;
+import cl.telematica.android.alimentame.Servicio.TransferGoogleApi;
 
 public class UserActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -83,13 +70,13 @@ public class UserActivity extends FragmentActivity implements OnMapReadyCallback
                 gps.showSettingsAlert();
             }
         }
-    ver.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent x = new Intent(UserActivity.this,TiendaActivity.class);
-            startActivity(x);
-        }
-    });
+        ver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent x = new Intent(UserActivity.this,TiendaActivity.class);
+                startActivity(x);
+            }
+        });
 
 
     }
@@ -113,13 +100,13 @@ public class UserActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMinZoomPreference((float) 17);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Tu estas aqui!"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-       for (int i=0;i<TransferGoogleApi.getLista().size();i++) {
-            Localizacion objeto = TransferGoogleApi.getLista().get(i);
-            LatLng nuevo = new LatLng(objeto.getLatitud(),objeto.getLongitud());
-            mMap.addMarker(new MarkerOptions().position(nuevo).title(objeto.getVendedor()).icon(BitmapDescriptorFactory.fromResource(R.drawable.open)));
+            for (int i = 0; i < TransferGoogleApi.getLista().size(); i++) {
+                Localizacion objeto = TransferGoogleApi.getLista().get(i);
+                LatLng nuevo = new LatLng(objeto.getLatitud(), objeto.getLongitud());
+                mMap.addMarker(new MarkerOptions().position(nuevo).title(objeto.getVendedor()).icon(BitmapDescriptorFactory.fromResource(R.drawable.open)));
+            }
         }
-
 
     }
 
-}
+

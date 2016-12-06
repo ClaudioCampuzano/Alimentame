@@ -1,4 +1,4 @@
-package cl.telematica.android.alimentame.servicios;
+package cl.telematica.android.alimentame.Servicio;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
 import cl.telematica.android.alimentame.Presenters.GoogleApi;
 
 /**
- * Created by gerson on 05-12-16.
+ * Created by gerson on 06-12-16.
  */
 
 public class TransferGoogleApi {
