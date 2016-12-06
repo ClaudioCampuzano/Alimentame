@@ -16,7 +16,7 @@ public class Vendedor extends AppCompatActivity implements VendedorView{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vendedor);
-        User_ID = "2";
+        User_ID = "3";
     }
 
     @Override

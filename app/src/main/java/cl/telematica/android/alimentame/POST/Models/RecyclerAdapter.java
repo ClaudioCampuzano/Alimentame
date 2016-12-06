@@ -37,9 +37,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.Nombre.setText(datos.get(position).getNombre()+"\n");
-        holder.Descripcion.setText(description(datos.get(position).getDescripcion()));
-        holder.Precio.setText(datos.get(position).getPrecio());
+        holder.Nombre.setText("Producto: "+datos.get(position).getNombre()+"\n");
+        holder.Descripcion.setText("Descripcion: "+description(datos.get(position).getDescripcion()));
+        holder.Precio.setText("$"+datos.get(position).getPrecio());
     }
     public String description (String description){
         if (description == "null")

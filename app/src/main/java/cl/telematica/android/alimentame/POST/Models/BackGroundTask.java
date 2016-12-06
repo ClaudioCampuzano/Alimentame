@@ -38,7 +38,7 @@ public class BackGroundTask {
                             try {
                                 JSONObject jsonObject = response.getJSONObject(count);
                                 Datos datos = new Datos(jsonObject.getString("Nombre"), jsonObject.getString("Descripcion"),
-                                        jsonObject.getString("state"), jsonObject.getString("Precio"), jsonObject.getString("Latitud"),
+                                         jsonObject.getString("Precio"), jsonObject.getString("state"), jsonObject.getString("Latitud"),
                                         jsonObject.getString("Imagen"), jsonObject.getString("Longitud"));
                                 arrayList.add(datos);
                                 count++;
