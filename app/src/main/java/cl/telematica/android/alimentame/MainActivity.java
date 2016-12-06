@@ -82,6 +82,16 @@ public class MainActivity extends AppCompatActivity{
     public static final String MyPREFERENCES = "MyPrefs" ;
 
 
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        if(sharedpreferences.getString("name", "name") == "name") {
+            checkLog();
+        }
+    }
+
+
     /**** LOGIN INTERVENTION ****/
 
     @Override
@@ -166,9 +176,10 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onStart() {
         /**** LOGIN INTERVENTION ****/
-       // if(!checked) {
-         //   checkLog();
-        //}
+        SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        if(sharedpreferences.getString("name", "name") == "name") {
+            checkLog();
+        }
         /**** LOGIN INTERVENTION ****/
 
         super.onStart();
