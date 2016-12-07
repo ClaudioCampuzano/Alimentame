@@ -1,5 +1,7 @@
 package cl.telematica.android.alimentame.Servicio;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 
 import cl.telematica.android.alimentame.Models.Localizacion;
@@ -14,6 +16,15 @@ public class TransferGoogleApi {
     private static GoogleApi googleApi;
     private static ConectionPresenters conectionPresenters;
     private static List<Localizacion> lista;
+    private static LatLng ubicacion;
+
+    public static LatLng getUbicacion() {
+        return ubicacion;
+    }
+
+    public static void setUbicacion(LatLng ubicacion) {
+        TransferGoogleApi.ubicacion = ubicacion;
+    }
 
     public static GoogleApi getGoogleApi() {
         return googleApi;

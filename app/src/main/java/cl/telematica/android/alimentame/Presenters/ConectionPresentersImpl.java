@@ -169,7 +169,6 @@ public class ConectionPresentersImpl implements ConectionPresenters{
             protected String doInBackground(Void... voids) {
                 String repositorios = new HttpServerConnection().
                         connectToServer("http://alimentame-multimedios.esy.es/obtener_productos.php", 15000);
-
                 return repositorios;
             }
 

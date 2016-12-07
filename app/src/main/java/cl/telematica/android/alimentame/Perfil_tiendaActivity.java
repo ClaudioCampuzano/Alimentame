@@ -36,7 +36,7 @@ public class Perfil_tiendaActivity extends AppCompatActivity {
         precio = (TextView)findViewById(R.id.precio3);
         dist = (TextView)findViewById(R.id.distancia);
         String url ="http://alimentame-multimedios.esy.es/producto_info.php";
-        String name = getIntent().getExtras().getString("nombre");
+        String name = getIntent().getExtras().getString("nombre").replace(" ","");
         double lat=getIntent().getExtras().getDouble("latitud");
         double log=getIntent().getExtras().getDouble("longitud");
         double tulat=getIntent().getExtras().getDouble("tulatitud");
@@ -50,9 +50,12 @@ public class Perfil_tiendaActivity extends AppCompatActivity {
         nombre.setText(name);
         latitud.setText(latitude);
         longitud.setText(longitude);
+        System.out.println(name);
         final String peticion = url+"?"+"nombre="+name+"&"
                 +"latitud="+latitude+"&"
                 +"longitud="+longitude;
+
+
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {

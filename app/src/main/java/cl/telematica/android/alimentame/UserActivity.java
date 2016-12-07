@@ -109,6 +109,7 @@ public class UserActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(gps.getLatitude(), gps.getLongitude());
+        TransferGoogleApi.setUbicacion(sydney);
         mMap.setMinZoomPreference((float) 17);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Tu estas aqui!"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
@@ -124,13 +125,16 @@ public class UserActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Intent x = new Intent(UserActivity.this,Perfil_tiendaActivity.class);
-                x.putExtra("nombre",marker.getTitle());
-                x.putExtra("latitud",marker.getPosition().latitude);
-                x.putExtra("longitud",marker.getPosition().longitude);
-                x.putExtra("tulatitud",gps.getLatitude());
-                x.putExtra("tulongitud",gps.getLongitude());
-                startActivity(x);
+                if(!(marker.getTitle().equals("Tu estas aqui!"))) {
+                    Intent x = new Intent(UserActivity.this, Perfil_tiendaActivity.class);
+                    x.putExtra("nombre", marker.getTitle());
+                    x.putExtra("latitud", marker.getPosition().latitude);
+                    x.putExtra("longitud", marker.getPosition().longitude);
+                    x.putExtra("tulatitud", gps.getLatitude());
+                    x.putExtra("tulongitud", gps.getLongitude());
+                    startActivity(x);
+                    return false;
+                }
                 return false;
             }
         });

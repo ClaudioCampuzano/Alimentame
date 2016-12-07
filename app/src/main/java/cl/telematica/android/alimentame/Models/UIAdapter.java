@@ -1,8 +1,10 @@
 package cl.telematica.android.alimentame.Models;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,7 +19,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import cl.telematica.android.alimentame.Perfil_tiendaActivity;
 import cl.telematica.android.alimentame.R;
+import cl.telematica.android.alimentame.Servicio.TransferGoogleApi;
 
 /**
  * Created by gerson on 06-12-16.
@@ -53,12 +57,15 @@ public class UIAdapter extends RecyclerView.Adapter<UIAdapter.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-            /*int position = getAdapterPosition();
+            int position = getAdapterPosition();
             Localizacion dato = list.get(position);
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            ntent.setData(Uri.parse(dato.getUrl()));
-            this.mContext.startActivity(intent);*/
-            Toast.makeText(mContext,"abrir perfil del tienda",Toast.LENGTH_SHORT).show();
+            Intent x = new Intent(mContext, Perfil_tiendaActivity.class);
+            x.putExtra("nombre",dato.getNombre());
+            x.putExtra("latitud",dato.getLatitud());
+            x.putExtra("longitud",dato.getLongitud());
+            x.putExtra("tulatitud", TransferGoogleApi.getUbicacion().latitude);
+            x.putExtra("tulongitud",TransferGoogleApi.getUbicacion().longitude);
+            this.mContext.startActivity(x);
         }
     }
     public UIAdapter(List<Localizacion> datos,Context context) {
