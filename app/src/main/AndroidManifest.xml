@@ -27,7 +27,6 @@
 
         <service android:name=".Presenters.GeofenceTransitionsIntentService" />
 
-        <activity android:name=".POST.Publicar" />
         <activity android:name=".LogIn.LogInActivity" />
         <activity android:name=".LogIn.SignUp" />
         <activity android:name=".TiendaActivity" />
@@ -53,8 +52,10 @@
             android:exported="true" />
 
         <activity android:name=".Perfil_tiendaActivity" />
+        <activity android:name=".POST.Publicar" />
+        <activity android:name=".POST.VerProductos" />
         <activity android:name=".POST.Vendedor" />
-        <activity android:name=".POST.VerProductos"></activity>
+        <activity android:name=".POST.Modificar"></activity>
     </application>
 
 </manifest>

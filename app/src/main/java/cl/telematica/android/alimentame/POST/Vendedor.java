@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import cl.telematica.android.alimentame.POST.View.VendedorView;
 import cl.telematica.android.alimentame.R;
 
-public class Vendedor extends AppCompatActivity implements VendedorView {
+public class Vendedor extends AppCompatActivity implements VendedorView{
     String User_ID;
 
     @Override

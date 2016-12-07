@@ -1,7 +1,7 @@
 package cl.telematica.android.alimentame.POST.Models;
 
 /**
- * Created by gerson on 07-12-16.
+ * Created by Claudio on 30-09-2016.
  */
 
 public class Datos {

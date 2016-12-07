@@ -48,4 +48,8 @@
     <string name="titulolistar">Tus tiendas</string>
     <string name="eliminar">Eliminar</string>
     <string name="modificar">Modificar</string>
+    <string name="modifica">Modificar Tienda</string>
+    <string name="Disponible">Disponible</string>
+    <string name="noDisponible">No disponible</string>
+
 </resources>

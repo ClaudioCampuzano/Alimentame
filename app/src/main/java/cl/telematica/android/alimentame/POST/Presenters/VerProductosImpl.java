@@ -8,7 +8,7 @@ import cl.telematica.android.alimentame.POST.Presenters.Contract.VerProductosPre
 import cl.telematica.android.alimentame.POST.VerProductos;
 
 /**
- * Created by gerson on 07-12-16.
+ * Created by Claudio on 04-12-2016.
  */
 
 public class VerProductosImpl implements VerProductosPresenters {
