@@ -42,4 +42,7 @@
     <string name="nombre">Nombre de la tienda</string>
     <string name="descricion">Descripcion</string>
     <string name="publicar">Publicar</string>
+    <string name="titulolistar">Tus tiendas</string>
+    <string name="eliminar">Eliminar producto</string>
+    <string name="modificar">Modificar producto</string>
 </resources>

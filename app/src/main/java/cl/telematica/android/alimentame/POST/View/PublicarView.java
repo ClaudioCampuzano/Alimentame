@@ -8,7 +8,6 @@ import android.view.View;
 
 public interface PublicarView {
     void publicar (View V);
-    void RestaurarActividadPrincipal();
     void camera(View V);
     void gallery(View V);
 }

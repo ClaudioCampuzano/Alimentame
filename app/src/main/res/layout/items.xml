@@ -1,29 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="7dp">
+    android:padding="7dp"
+    android:weightSum="1">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="13dp"
+        app:srcCompat="@drawable/verde"
+        android:id="@+id/ESTADOFOTO"
+        android:layout_weight="0.29"
+        android:background="@color/wallet_bright_foreground_holo_light" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/prod_nombre"
-        android:background="#353638"
-        android:textSize="15sp"
-        android:textColor="@android:color/background_light" />
+        android:background="@color/wallet_bright_foreground_holo_light"
+        android:textSize="18sp"
+        android:textColor="@android:color/background_light"
+        android:textAlignment="viewStart" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/prod_descripcion"
-        android:background="#353638"
+        android:background="@color/wallet_bright_foreground_holo_light"
         android:textColor="@android:color/background_light" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/prod_precio"
-        android:background="#353638"
-        android:textColor="@android:color/background_light"/>
+        android:background="@color/wallet_bright_foreground_holo_light"
+        android:textColor="@android:color/background_light"
+        android:textAlignment="center" />
 
 </LinearLayout>

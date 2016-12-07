@@ -6,8 +6,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera2" android:required="true"/>"
 
+    <uses-feature
+        android:name="android.hardware.camera2"
+        android:required="true" />
+    "
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,7 +29,8 @@
 
         <activity android:name=".POST.Publicar" />
         <activity android:name=".POST.VerProductos" />
-        <activity android:name=".POST.Vendedor"></activity>
+        <activity android:name=".POST.Vendedor" />
+        <activity android:name=".POST.menu_listar"></activity>
     </application>
 
 </manifest>

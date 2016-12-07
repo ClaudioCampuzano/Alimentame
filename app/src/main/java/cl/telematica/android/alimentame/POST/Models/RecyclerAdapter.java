@@ -1,16 +1,21 @@
 package cl.telematica.android.alimentame.POST.Models;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import java.util.ArrayList;
 
+import cl.telematica.android.alimentame.POST.Publicar;
+import cl.telematica.android.alimentame.POST.Vendedor;
+import cl.telematica.android.alimentame.POST.menu_listar;
 import cl.telematica.android.alimentame.R;
 
 /**
@@ -37,10 +42,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.Nombre.setText("Producto: "+datos.get(position).getNombre()+"\n");
-        holder.Descripcion.setText("Descripcion: "+description(datos.get(position).getDescripcion()));
-        holder.Precio.setText("$"+datos.get(position).getPrecio());
+        holder.Nombre.setText("Producto: " + datos.get(position).getNombre() + "\n");
+        holder.Descripcion.setText("Descripcion: " + description(datos.get(position).getDescripcion()));
+        holder.Precio.setText("$" + datos.get(position).getPrecio());
+        if(datos.get(position).getState().equals("0"))
+            holder.State.setImageResource(R.drawable.rojo);
+        else
+            holder.State.setImageResource(R.drawable.verde);
     }
+
     public String description (String description){
         if (description == "null")
             return "Sin descripción disponible\n";
@@ -55,6 +65,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView Nombre,Descripcion,Precio;
+        ImageView State;
         ArrayList<Datos> datos = new ArrayList<Datos>();
         Context ctx;
 
@@ -67,11 +78,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             Nombre = (TextView) itemView.findViewById(R.id.prod_nombre);
             Descripcion = (TextView) itemView.findViewById(R.id.prod_descripcion);
             Precio = (TextView) itemView.findViewById(R.id.prod_precio);
+            State = (ImageView) itemView.findViewById(R.id.ESTADOFOTO);
         }
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(ctx,"Gracias por hacer click",Toast.LENGTH_LONG).show();
+            Intent explicit_intent = new Intent(ctx,menu_listar.class);
+            ctx.startActivity(explicit_intent);
         }
     }
 }

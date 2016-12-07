@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.kosalgeek.android.photoutil.CameraPhoto;
 import com.kosalgeek.android.photoutil.GalleryPhoto;
+import com.kosalgeek.android.photoutil.ImageBase64;
 import com.kosalgeek.android.photoutil.ImageLoader;
 
 import java.io.FileNotFoundException;
@@ -54,13 +56,6 @@ public class Publicar extends AppCompatActivity implements PublicarView {
         mPresenter.InicializarGps();
     }
 
-    @Override
-    public void RestaurarActividadPrincipal() {
-        Intent i = getApplicationContext().getPackageManager()
-                .getLaunchIntentForPackage(getApplicationContext().getPackageName());
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(i);
-    }
 
     @Override
     public void camera(View V) {
@@ -85,7 +80,7 @@ public class Publicar extends AppCompatActivity implements PublicarView {
                 SelectedPhoto = photoPath;
                 Bitmap bitmap = null;
                 try {
-                    bitmap = ImageLoader.init().from(photoPath).requestSize(256, 256).getBitmap();
+                    bitmap = ImageLoader.init().from(photoPath).requestSize(512, 512).getBitmap();
                     ivImagen.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     Toast.makeText(getApplicationContext(), "Algo anda mal", Toast.LENGTH_SHORT).show();
@@ -97,26 +92,26 @@ public class Publicar extends AppCompatActivity implements PublicarView {
                 SelectedPhoto =photoPath;
                 Bitmap bitmap = null;
                 try {
-                    bitmap = ImageLoader.init().from(photoPath).requestSize(256, 256).getBitmap();
+                    bitmap = ImageLoader.init().from(photoPath).requestSize(512, 512).getBitmap();
                     ivImagen.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     Toast.makeText(getApplicationContext(), "Algo anda mal", Toast.LENGTH_SHORT).show();
                 }
             }
         }
-
     }
 
     @Override
     public void publicar(View V) {
-        if (!Nombre.getText().toString().equalsIgnoreCase("") &&
-                !Precio.getText().toString().equalsIgnoreCase("") && !Descripcion.getText().toString().equalsIgnoreCase("")) {
-            mPresenter.SetData(Nombre.getText().toString(), Precio.getText().toString(), Descripcion.getText().toString(),
-                    User_ID, "1", "puto.png");
-            mPresenter.UploadData();
-        } else {
-            Toast.makeText(Publicar.this, "Hay informacion por rellenar", Toast.LENGTH_LONG).show();
-        }
-    }
+            if (!Nombre.getText().toString().equalsIgnoreCase("") &&
+                    !Precio.getText().toString().equalsIgnoreCase("") && !Descripcion.getText().toString().equalsIgnoreCase("")) {
 
+                mPresenter.SetData(Nombre.getText().toString(), Precio.getText().toString(), Descripcion.getText().toString(),
+                        User_ID, "1", "puto.png");
+                mPresenter.UploadData();
+
+            } else {
+                Toast.makeText(Publicar.this, "Hay informacion por rellenar", Toast.LENGTH_LONG).show();
+            }
+    }
 }

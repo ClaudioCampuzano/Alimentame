@@ -69,8 +69,10 @@ public class PublicarImpl implements PublicarPresenters {
                         mActivity.Precio.setText("");
                     }
                 });
+                mActivity.Nombre.setText("");
+                mActivity.Descripcion.setText("");
+                mActivity.Precio.setText("");
                 Toast.makeText(mActivity,"Insercion exitosa",Toast.LENGTH_LONG).show();
-                mActivity.RestaurarActividadPrincipal();
             }
         }, new Response.ErrorListener() {
             @Override
