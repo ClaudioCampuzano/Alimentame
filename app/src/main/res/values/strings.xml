@@ -31,4 +31,21 @@
     <string name="producto">Producto</string>
     <string name="insertar">Publicar</string>
     <string name="title_activity_user">Map</string>
+    <string name="Name_prod">Nombre Producto</string>
+    <string name="Precio">Precio</string>
+    <string name="Descripcion">Descipcion</string>
+    <string name="interfaz_vendedor">Interfaz Vendedor</string>
+    <string name="button">Publicar producto</string>
+    <string name="button1">Ver productos publicados</string>
+    <string name="desc">botonGalleria</string>
+    <string name="desc2">boton Camara</string>
+    <string name="desc3">Mostrar foto</string>
+    <string name="precio">Precio</string>
+    <string name="tienda">Publicacion de Tienda</string>
+    <string name="nombre">Nombre de la tienda</string>
+    <string name="descricion">Descripcion</string>
+    <string name="publicar">Publicar</string>
+    <string name="titulolistar">Tus tiendas</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="modificar">Modificar</string>
 </resources>

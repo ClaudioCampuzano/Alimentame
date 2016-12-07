@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cl.telematica.android.alimentame.MainActivity;
-import cl.telematica.android.alimentame.POST.MySingleton;
+import cl.telematica.android.alimentame.POST.Models.MySingleton;
 import cl.telematica.android.alimentame.R;
 
 import static com.android.volley.Request.Method.POST;

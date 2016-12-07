@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
@@ -12,56 +13,118 @@
     android:background="@drawable/blackground1" >
 
     <TextView
-        android:text="Publicacion de producto"
+        android:text="@string/tienda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Titulo"
+        android:textSize="30sp"
+        android:textColor="@color/wallet_bright_foreground_holo_light"
+        android:textStyle="normal|bold|italic"
+        android:textAlignment="center"
+        tools:ignore="RtlCompat"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="@string/nombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textColor="@color/cast_expanded_controller_background_color"
+        android:layout_marginTop="24dp"
+        android:layout_below="@+id/Titulo"
+        android:layout_toLeftOf="@+id/foto_seleccion"
+        android:layout_toStartOf="@+id/foto_seleccion" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/Nombre"
+        android:layout_below="@+id/textView"
+        android:layout_toRightOf="@+id/textView4"
+        android:layout_toEndOf="@+id/textView4" />
+
+    <TextView
+        android:text="@string/Descripcion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView2"
-        android:textSize="34sp"
-        android:textColor="?android:attr/colorForeground" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/vendedor"
-        android:textColor="@color/wallet_bright_foreground_holo_light"
-        android:textSize="20sp" />
+        android:layout_below="@+id/Nombre"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:textColor="@color/colorAccent" />
 
     <EditText
-        android:id="@+id/vendedor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textPersonName"
         android:ems="10"
-        android:inputType="text">
-
-        <requestFocus />
-    </EditText>
+        android:id="@+id/Descripcion"
+        android:layout_below="@+id/textView2"
+        android:layout_toRightOf="@+id/textView4"
+        android:layout_toEndOf="@+id/textView4" />
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+        android:text="@string/Precio"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/producto"
-        android:textColor="@color/wallet_bright_foreground_holo_light"
-        android:textSize="20sp" />
+        android:id="@+id/textView4"
+        android:layout_below="@+id/Descripcion"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:textColor="@color/colorAccent" />
 
     <EditText
-        android:id="@+id/producto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="number"
         android:ems="10"
-        android:inputType="text" />
+        android:id="@+id/Precio"
+        android:layout_below="@+id/textView4"
+        android:layout_toRightOf="@+id/textView4"
+        android:layout_toEndOf="@+id/textView4" />
 
-    <LinearLayout
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_camera"
+        android:id="@+id/imageView"
+        android:contentDescription="@string/desc2"
+        android:onClick="camera"
+        android:layout_centerVertical="true" />
 
-        <Button
-            android:id="@+id/insertar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/insertar"
-            android:elevation="0dp" />
-    </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_gallery"
+        android:id="@+id/imageView2"
+        android:contentDescription="@string/desc"
+        android:onClick="gallery"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
+    <Button
+        android:text="@string/publicar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Boton"
+        android:onClick="publicar"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        android:id="@+id/foto_seleccion"
+        android:contentDescription="@string/desc3"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/Boton"
+        android:layout_centerHorizontal="true" />
 </LinearLayout>

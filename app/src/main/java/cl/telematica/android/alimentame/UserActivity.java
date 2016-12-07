@@ -1,8 +1,6 @@
 package cl.telematica.android.alimentame;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -22,7 +20,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import cl.telematica.android.alimentame.Models.Localizacion;
-import cl.telematica.android.alimentame.POST.GPSTracker;
+import cl.telematica.android.alimentame.POST.Models.GPSTracker;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
 import cl.telematica.android.alimentame.Presenters.GoogleApi;
 import cl.telematica.android.alimentame.Servicio.TransferGoogleApi;

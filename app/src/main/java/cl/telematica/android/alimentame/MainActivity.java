@@ -28,6 +28,7 @@ import java.util.HashMap;
 import cl.telematica.android.alimentame.LogIn.LogInActivity;
 import cl.telematica.android.alimentame.Models.Peticiones;
 import cl.telematica.android.alimentame.POST.Publicar;
+import cl.telematica.android.alimentame.POST.Vendedor;
 import cl.telematica.android.alimentame.Presenters.ConectionPresentersImpl;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
 import cl.telematica.android.alimentame.Presenters.GoogleApi;
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity{
         agregarZona.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent variable_aux  = new Intent(MainActivity.this,Publicar.class);
+                Intent variable_aux  = new Intent(MainActivity.this,Vendedor.class);
                 startActivity(variable_aux);
             }
         });
