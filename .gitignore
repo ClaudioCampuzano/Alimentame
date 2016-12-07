@@ -34,3 +34,4 @@ org.eclipse.jdt.core.prefs
 com_crashlytics_export_strings.xml
 assets/crashlytics-build.properties
 
+app/src/main/java/cl/telematica/android/alimentame/LogIn/SignUp.java
