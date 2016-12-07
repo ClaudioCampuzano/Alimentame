@@ -30,7 +30,6 @@
         <activity android:name=".POST.Publicar" />
         <activity android:name=".POST.VerProductos" />
         <activity android:name=".POST.Vendedor" />
-        <activity android:name=".POST.menu_listar"></activity>
     </application>
 
 </manifest>

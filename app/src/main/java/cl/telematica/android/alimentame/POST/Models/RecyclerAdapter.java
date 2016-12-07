@@ -1,11 +1,11 @@
 package cl.telematica.android.alimentame.POST.Models;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,9 +13,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import cl.telematica.android.alimentame.POST.Publicar;
-import cl.telematica.android.alimentame.POST.Vendedor;
-import cl.telematica.android.alimentame.POST.menu_listar;
 import cl.telematica.android.alimentame.R;
 
 /**
@@ -25,6 +22,27 @@ import cl.telematica.android.alimentame.R;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
     ArrayList<Datos> datos = new ArrayList<>();
     Context ctx;
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder{
+        TextView Nombre,Descripcion,Precio;
+        Button modificar, eliminar;
+        ImageView State;
+        ArrayList<Datos> datos = new ArrayList<Datos>();
+        Context ctx;
+
+        public MyViewHolder(View itemView, Context ctx, ArrayList<Datos> datos) {
+            super(itemView);
+            this.datos = datos;
+            this.ctx = ctx;
+
+            Nombre = (TextView) itemView.findViewById(R.id.prod_nombre);
+            Descripcion = (TextView) itemView.findViewById(R.id.prod_descripcion);
+            Precio = (TextView) itemView.findViewById(R.id.prod_precio);
+            State = (ImageView) itemView.findViewById(R.id.ESTADOFOTO);
+            modificar= (Button) itemView.findViewById(R.id.Modificar);
+            eliminar= (Button) itemView.findViewById(R.id.Eliminar);
+        }
+    }
 
     public RecyclerAdapter(ArrayList<Datos> datos, Context ctx){
         this.datos=datos;
@@ -37,7 +55,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.items,parent,false);
         MyViewHolder myViewHolder = new MyViewHolder(view, ctx, datos);
         return myViewHolder;
-
     }
 
     @Override
@@ -49,6 +66,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             holder.State.setImageResource(R.drawable.rojo);
         else
             holder.State.setImageResource(R.drawable.verde);
+        holder.modificar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ctx,"MODIFICAR PUTO",Toast.LENGTH_SHORT).show();
+            }
+        });
+        holder.eliminar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+                Toast.makeText(ctx,"Eliminar PUTO",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public String description (String description){
@@ -61,30 +91,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @Override
     public int getItemCount() {
         return datos.size();
-    }
-
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView Nombre,Descripcion,Precio;
-        ImageView State;
-        ArrayList<Datos> datos = new ArrayList<Datos>();
-        Context ctx;
-
-        public MyViewHolder(View itemView, Context ctx, ArrayList<Datos> datos) {
-            super(itemView);
-            this.datos = datos;
-            this.ctx = ctx;
-
-            itemView.setOnClickListener(this);
-            Nombre = (TextView) itemView.findViewById(R.id.prod_nombre);
-            Descripcion = (TextView) itemView.findViewById(R.id.prod_descripcion);
-            Precio = (TextView) itemView.findViewById(R.id.prod_precio);
-            State = (ImageView) itemView.findViewById(R.id.ESTADOFOTO);
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent explicit_intent = new Intent(ctx,menu_listar.class);
-            ctx.startActivity(explicit_intent);
-        }
     }
 }
