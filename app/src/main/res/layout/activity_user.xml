@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView3"
         android:textSize="24sp"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textStyle="normal|bold|italic" />
 
     <fragment
         android:id="@+id/map"

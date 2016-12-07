@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="cl.telematica.android.alimentame.POST.Vendedor">
+    tools:context="cl.telematica.android.alimentame.POST.Vendedor"
+    android:background="@drawable/blackground">
 
     <TextView
         android:text="@string/interfaz_vendedor"
@@ -18,26 +19,29 @@
         android:id="@+id/textView3"
         android:textSize="36sp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/cast_libraries_material_featurehighlight_text_header_color"
+        android:textStyle="normal|bold|italic"
+        android:textAlignment="center" />
 
     <Button
         android:text="@string/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="89dp"
+        android:layout_marginTop="111dp"
         android:id="@+id/button"
+        android:onClick="Ir_a_Publicar"
         android:layout_below="@+id/textView3"
-        android:layout_centerHorizontal="true"
-        android:onClick="Ir_a_Publicar"/>
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:text="@string/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:id="@+id/button2"
+        android:onClick="Ir_a_Listar"
+        android:layout_marginTop="57dp"
         android:layout_below="@+id/button"
-        android:layout_centerHorizontal="true"
-        android:onClick="Ir_a_Listar"/>
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

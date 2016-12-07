@@ -11,16 +11,17 @@
 
     <TextView
         android:text="Venta de"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/textView5"
         android:textSize="36sp"
-        android:textColor="@color/cast_expanded_controller_background_color" />
+        android:textColor="@color/cast_expanded_controller_background_color"
+        android:textAlignment="center" />
 
     <TextView
         android:text="TextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/nombre_user"
@@ -28,7 +29,9 @@
         android:textColor="@color/cast_expanded_controller_background_color"
         android:layout_marginRight="13dp"
         android:layout_marginEnd="13dp"
-        android:layout_marginBottom="60dp" />
+        android:layout_marginBottom="60dp"
+        android:layout_weight="0.02"
+        android:textAlignment="center" />
 
     <TextView
         android:text="TextView"
@@ -37,7 +40,7 @@
         android:layout_gravity="center"
         android:id="@+id/detalle"
         android:textSize="24sp"
-        android:textColor="@color/cast_expanded_controller_background_color"
+        android:textColor="@color/cardview_dark_background"
         android:layout_marginBottom="50dp"
         android:textAlignment="center"
         android:textAllCaps="true" />
@@ -47,7 +50,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/linearLayout2"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="50dp"
+        android:weightSum="1">
 
         <TextView
             android:text="Precio  $"
@@ -55,7 +59,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView4"
             android:textSize="24sp"
-            android:textColor="@color/cast_expanded_controller_background_color" />
+            android:textColor="@color/cast_expanded_controller_background_color"
+            android:background="@color/cast_expanded_controller_text_color"
+            android:layout_weight="0.08"
+            android:textStyle="normal|bold|italic" />
 
         <TextView
             android:text="TextView"
@@ -73,7 +80,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/linearLayout2"
-        android:layout_marginBottom="100dp">
+        android:layout_marginBottom="100dp"
+        android:weightSum="1">
 
         <TextView
             android:text="Distancia"
@@ -81,7 +89,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView6"
             android:textSize="24sp"
-            android:textColor="@color/cast_expanded_controller_background_color" />
+            android:textColor="@color/cast_expanded_controller_background_color"
+            android:background="@color/cast_expanded_controller_text_color"
+            android:layout_weight="0.07"
+            android:textStyle="normal|bold|italic" />
 
         <TextView
             android:text="TextView"
@@ -102,12 +113,13 @@
 
         <TextView
             android:text="Ubicacion"
-            android:layout_width="match_parent"
+            android:layout_width="123dp"
             android:layout_height="wrap_content"
             android:id="@+id/textView9"
             android:textSize="24sp"
             android:textColor="@color/cast_expanded_controller_background_color"
-            android:layout_weight="1" />
+            android:background="@color/cast_expanded_controller_text_color"
+            android:textStyle="normal|bold|italic" />
 
         <TextView
             android:text="TextView"
