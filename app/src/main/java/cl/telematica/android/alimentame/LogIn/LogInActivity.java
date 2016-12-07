@@ -102,6 +102,7 @@ public class LogInActivity extends AppCompatActivity {
                                     editor.putString("hpass", hashPass);
                                     editor.putString("desc", (String) jsonObject.get("desc"));
                                     editor.putString("User_ID",(String)jsonObject.get("id"));
+                                    Toast.makeText(LogInActivity.this,(String) jsonObject.get("id"), Toast.LENGTH_SHORT).show();
                                     editor.commit();
                                     Intent intent = new Intent(LogInActivity.this, MainActivity.class);
                                     startActivity(intent);

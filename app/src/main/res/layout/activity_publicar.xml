@@ -10,16 +10,18 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/blackground1" >
+    android:background="@drawable/app_background2" >
 
     <TextView
         android:text="@string/tienda"
+        android:padding="6dp"
+        android:background="#cfd8dc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/Titulo"
         android:textSize="30sp"
-        android:textColor="@color/wallet_bright_foreground_holo_light"
-        android:textStyle="normal|bold|italic"
+        android:textColor="#a8ffffff"
+        android:textStyle="bold"
         android:textAlignment="center"
         tools:ignore="RtlCompat"
         android:layout_alignParentTop="true"

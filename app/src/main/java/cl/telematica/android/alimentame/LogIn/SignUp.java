@@ -55,6 +55,7 @@ public class SignUp extends AppCompatActivity {
                 img = imgT.getText().toString();
                 try {
                     hashPass = bin2hex(digest(pass));
+                    Toast.makeText(SignUp.this, hashPass, Toast.LENGTH_SHORT).show();
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
@@ -73,15 +74,12 @@ public class SignUp extends AppCompatActivity {
                                         }
                                     }
                             );
-                            Toast.makeText(SignUp.this, "Respuesta = "+response, Toast.LENGTH_LONG).show();
                             Toast.makeText(SignUp.this, String.valueOf(response.equals("true")), Toast.LENGTH_SHORT).show();
-                            if(response.equals("true")){
-                                Toast.makeText(SignUp.this, "PLP", Toast.LENGTH_SHORT).show();
+                            if(response.equals("false")){
+                                Toast.makeText(SignUp.this, "Nombre de usuario en uso", Toast.LENGTH_SHORT).show();
+                            }else {
                                 Intent intent = new Intent(SignUp.this, LogInActivity.class);
                                 startActivity(intent);
-                            }else {
-                                Toast.makeText(SignUp.this, "Puta la wea="+response, Toast.LENGTH_LONG).show();
-                                Toast.makeText(SignUp.this, "Nombre de usuario en uso", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -108,7 +106,7 @@ public class SignUp extends AppCompatActivity {
                     };
                     MySingleton.getmInstance(SignUp.this).addTorequestque(stringRequest);
                 } else
-                    Toast.makeText(SignUp.this, "Hay informacion por rellenar", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignUp.this, "Falta informacion por rellenar", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -1,11 +1,12 @@
 package cl.telematica.android.alimentame.POST;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -13,7 +14,6 @@ import android.widget.Toast;
 
 import com.kosalgeek.android.photoutil.CameraPhoto;
 import com.kosalgeek.android.photoutil.GalleryPhoto;
-import com.kosalgeek.android.photoutil.ImageBase64;
 import com.kosalgeek.android.photoutil.ImageLoader;
 
 import java.io.FileNotFoundException;
@@ -36,9 +36,12 @@ public class Publicar extends AppCompatActivity implements PublicarView {
     final int GALLERY_REQUEST = 22131;
     //private final String TAG = this.getClass().getName();
     String SelectedPhoto;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         setContentView(R.layout.activity_publicar);
@@ -48,7 +51,8 @@ public class Publicar extends AppCompatActivity implements PublicarView {
         ivImagen = (ImageView) findViewById(R.id.foto_seleccion);
 
 
-        User_ID = getIntent().getStringExtra("User_ID");
+        User_ID = sharedpreferences.getString("User_ID","0");
+        Toast.makeText(this, User_ID, Toast.LENGTH_SHORT).show();
         mPresenter = new PublicarImpl(this);
         Nombre = (EditText) findViewById(R.id.Nombre);
         Precio = (EditText) findViewById(R.id.Precio);

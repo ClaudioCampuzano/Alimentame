@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cl.telematica.android.alimentame.LogIn.LogInActivity"
     android:orientation="vertical"
-    android:background="@drawable/blackground">
+    android:background="@drawable/app_background">
 
 
     <LinearLayout

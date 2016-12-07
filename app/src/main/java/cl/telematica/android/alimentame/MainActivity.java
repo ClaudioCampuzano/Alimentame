@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +25,6 @@ import java.util.HashMap;
 
 import cl.telematica.android.alimentame.LogIn.LogInActivity;
 import cl.telematica.android.alimentame.Models.Peticiones;
-import cl.telematica.android.alimentame.POST.Publicar;
 import cl.telematica.android.alimentame.POST.Vendedor;
 import cl.telematica.android.alimentame.Presenters.ConectionPresentersImpl;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
@@ -94,6 +91,9 @@ public class MainActivity extends AppCompatActivity{
         SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
         if(sharedpreferences.getString("name", "name") == "name") {
             checkLog();
+        }else {
+            Intent intent = new Intent(MainActivity.this, UserActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -115,6 +115,10 @@ public class MainActivity extends AppCompatActivity{
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Intent intent = new Intent(MainActivity.this, UserActivity.class);
+        //startActivity(intent);
+
         listView = (ListView) findViewById(R.id.list_view);
         drawerLayout=(DrawerLayout) findViewById(R.id.drawer_layout);
         mAddGeofencesButton = (Button) findViewById(R.id.add_geofences_button);
@@ -143,6 +147,13 @@ public class MainActivity extends AppCompatActivity{
         TransferGoogleApi.setGoogleApi(googleApi);
         TransferGoogleApi.setConectionPresenters(conectionPresenters);
         startService(x);
+
+        conectionPresenters.makeRequest();
+        googleApi.addGeofences();
+
+        conectionPresenters.Extraerdatos().execute();
+        Intent intent = new Intent(MainActivity.this, UserActivity.class);
+        startActivity(intent);
 
         actualizarDatos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +201,9 @@ public class MainActivity extends AppCompatActivity{
         SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
         if(sharedpreferences.getString("name", "name") == "name") {
             checkLog();
+        }else {
+            Intent intent = new Intent(MainActivity.this, UserActivity.class);
+            startActivity(intent);
         }
         /**** LOGIN INTERVENTION ****/
 
@@ -211,41 +225,4 @@ public class MainActivity extends AppCompatActivity{
             startActivity(intent);
 
     }
-
-    AlertDialog.Builder builder;
-    /*public String getUserInfo(final String ID) {
-        final String n_url = "http://alimentame-multimedios.esy.es/getuser.php";
-        final String[] respuesta = new String[1];
-        StringRequest stringRequest = new StringRequest(POST, n_url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                builder.setMessage(response);
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                respuesta[0] = response;
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
-                error.printStackTrace();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("id", ID);
-                return params;
-            }
-        };
-        MySingleton.getmInstance(MainActivity.this).addTorequestque(stringRequest);
-        return respuesta[0];
-
-    }*/
-    /**** LOGIN INTERVENTION ****/
-
-
 }

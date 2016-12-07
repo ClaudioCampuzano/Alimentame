@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Preferencias" />
+        <item
+            android:id="@+id/geofenceAct"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Activar GeoFences" />
+
+    </group>
+
+
+
+    <item android:title="Ventas">
+        <menu>
+            <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/ventaAdd"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Agregar Producto" />
+            <item
+                android:id="@+id/venta1"
+                android:title="venta"
+                android:visible="false"/>
+            <item
+                android:id="@+id/venta2"
+                android:title="venta2"
+                android:visible="false"/>
+            <item
+                android:id="@+id/venta3"
+                android:title="venta3"
+                android:visible="false"/>
+            <item
+                android:id="@+id/venta4"
+                android:title="vent4"
+                android:visible="false"/>
+            <item
+                android:id="@+id/venta5"
+                android:title="venta5"
+                android:visible="false"/>
+            <item
+                android:id="@+id/venta6"
+                android:title="venta6"
+                android:visible="false"/>
+            <item
+                android:id="@+id/venta7"
+                android:title="venta7"
+                android:visible="false"/>
+            <item
+                android:id="@+id/venta8"
+                android:title="venta8"
+                android:visible="false"/>
+            <item
+                android:id="@+id/venta9"
+                android:title="venta9"
+                android:visible="false"/>
+            <item
+                android:id="@+id/ventaMas"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Ver todos"
+                android:visible="false"/>
+    </group>
+        </menu>
+    </item>
+
+        <item android:title="">
+        <menu>
+            <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Log Out" />
+            </group>
+        </menu>
+        </item>
+
+
+</menu>
