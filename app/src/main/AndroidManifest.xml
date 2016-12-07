@@ -39,11 +39,14 @@
 
         <activity
             android:name=".UserActivity"
-            android:label="@string/title_activity_user"></activity>
+            android:label="@string/title_activity_user" />
+
         <service
             android:name=".Servicio.ServiceUpdate"
             android:enabled="true"
             android:exported="true" />
+
+        <activity android:name=".Perfil_tiendaActivity"></activity>
     </application>
 
 </manifest>

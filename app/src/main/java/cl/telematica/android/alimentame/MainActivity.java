@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity{
         mAddGeofencesButton = (Button) findViewById(R.id.add_geofences_button);
         actualizarDatos = (Button) findViewById(R.id.actualizar);
         agregarZona = (Button) findViewById(R.id.agregar);
+        TransferGoogleApi.setLista(null);
 
 
         /**** LOGIN INTERVENTION ****/
@@ -176,6 +177,8 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         /**** LOGIN INTERVENTION ****/
+
+       // startActivity(new Intent(MainActivity.this,UserActivity.class));
 
     }
 

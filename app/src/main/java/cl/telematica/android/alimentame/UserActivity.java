@@ -1,6 +1,8 @@
 package cl.telematica.android.alimentame;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import cl.telematica.android.alimentame.Models.Localizacion;
@@ -42,10 +45,6 @@ public class UserActivity extends FragmentActivity implements OnMapReadyCallback
         ver= (Button)findViewById(R.id.button4);
         googleApi = TransferGoogleApi.getGoogleApi();
         conectionPresenters = TransferGoogleApi.getConectionPresenters();
-
-
-
-
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -81,6 +80,21 @@ public class UserActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        googleApi.mGoogleApiClient.connect();
+        Toast.makeText(this,"onStart",Toast.LENGTH_LONG);
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        googleApi.mGoogleApiClient.disconnect();
+        Toast.makeText(this,"onStop",Toast.LENGTH_LONG);
+    }
+
 
     /**
      * Manipulates the map once available.
@@ -100,11 +114,28 @@ public class UserActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMinZoomPreference((float) 17);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Tu estas aqui!"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        if(!(TransferGoogleApi.getLista()==null)) {
             for (int i = 0; i < TransferGoogleApi.getLista().size(); i++) {
                 Localizacion objeto = TransferGoogleApi.getLista().get(i);
                 LatLng nuevo = new LatLng(objeto.getLatitud(), objeto.getLongitud());
-                mMap.addMarker(new MarkerOptions().position(nuevo).title(objeto.getVendedor()).icon(BitmapDescriptorFactory.fromResource(R.drawable.open)));
+                mMap.addMarker(new MarkerOptions().position(nuevo).title(objeto.getNombre()).icon(BitmapDescriptorFactory.fromResource(R.drawable.open)));
+
             }
+        }
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Intent x = new Intent(UserActivity.this,Perfil_tiendaActivity.class);
+                x.putExtra("nombre",marker.getTitle());
+                x.putExtra("latitud",marker.getPosition().latitude);
+                x.putExtra("longitud",marker.getPosition().longitude);
+                x.putExtra("tulatitud",gps.getLatitude());
+                x.putExtra("tulongitud",gps.getLongitude());
+                startActivity(x);
+                return false;
+            }
+        });
         }
 
     }
