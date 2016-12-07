@@ -58,7 +58,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.Nombre.setText("Producto: " + datos.get(position).getNombre() + "\n");
         holder.Descripcion.setText("Descripcion: " + description(datos.get(position).getDescripcion()));
         holder.Precio.setText("$" + datos.get(position).getPrecio());
@@ -69,14 +69,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         holder.modificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ctx,"MODIFICAR PUTO",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx,datos.get(position).getProd_ID(),Toast.LENGTH_SHORT).show();
             }
         });
         holder.eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
-                Toast.makeText(ctx,"Eliminar PUTO",Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(ctx,datos.get(position).getProd_ID(),Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -87,6 +87,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         else
             return description+"\n";
     }
+
+
 
     @Override
     public int getItemCount() {

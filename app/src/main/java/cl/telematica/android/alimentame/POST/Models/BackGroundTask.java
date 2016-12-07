@@ -39,7 +39,7 @@ public class BackGroundTask {
                                 JSONObject jsonObject = response.getJSONObject(count);
                                 Datos datos = new Datos(jsonObject.getString("Nombre"), jsonObject.getString("Descripcion"),
                                          jsonObject.getString("Precio"), jsonObject.getString("state"), jsonObject.getString("Latitud"),
-                                        jsonObject.getString("Imagen"), jsonObject.getString("Longitud"));
+                                        jsonObject.getString("Imagen"), jsonObject.getString("Longitud"), jsonObject.getString("Prod_ID"));
                                 arrayList.add(datos);
                                 count++;
                             } catch (JSONException e) {
