@@ -68,6 +68,7 @@ public class ConectionPresentersImpl implements ConectionPresenters{
             public void onResponse(JSONArray jsonArray) {
                 List<Localizacion> lista = new ArrayList<Localizacion>();
                 lista = getLista(jsonArray);
+                TransferGoogleApi.setLista(lista);
                 for(int i=0;i<lista.size();i++){
                     String Nombre = lista.get(i).getNombre();
                     area.put(Nombre,
