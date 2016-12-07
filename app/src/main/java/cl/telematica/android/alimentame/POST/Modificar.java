@@ -125,7 +125,7 @@ public class Modificar extends AppCompatActivity implements ModificarView{
             params.put("state", state);
             params.put("Latitud", String.valueOf(gps.getLatitude()));
             params.put("Longitud", String.valueOf(gps.getLongitude()));
-            params.put("Imagen", "putito.png");
+            params.put("Imagen", "http://alimentame-multimedios.esy.es/food_mod.jpg");
             params.put("Prod_ID", getIntent().getStringExtra("Prod_ID"));
             JsonObjectRequest req = new JsonObjectRequest(url, new JSONObject(params),
                     new Response.Listener<JSONObject>() {

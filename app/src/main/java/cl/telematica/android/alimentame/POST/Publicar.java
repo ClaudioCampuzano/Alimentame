@@ -107,7 +107,7 @@ public class Publicar extends AppCompatActivity implements PublicarView {
                 !Precio.getText().toString().equalsIgnoreCase("") && !Descripcion.getText().toString().equalsIgnoreCase("")) {
 
             mPresenter.SetData(Nombre.getText().toString(), Precio.getText().toString(), Descripcion.getText().toString(),
-                    User_ID, "1", "puto.png");
+                    User_ID, "1", "http://alimentame-multimedios.esy.es/food.png");
             mPresenter.UploadData();
 
         } else {
