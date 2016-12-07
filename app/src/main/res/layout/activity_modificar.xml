@@ -10,18 +10,16 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/app_background2" >
+    android:background="@drawable/blackground1" >
 
     <TextView
-        android:text="@string/tienda"
-        android:padding="6dp"
-        android:background="#cfd8dc"
+        android:text="@string/modifica"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/Titulo"
         android:textSize="30sp"
-        android:textColor="#a8ffffff"
-        android:textStyle="bold"
+        android:textColor="@color/wallet_bright_foreground_holo_light"
+        android:textStyle="normal|bold|italic"
         android:textAlignment="center"
         tools:ignore="RtlCompat"
         android:layout_alignParentTop="true"
@@ -95,7 +93,7 @@
         app:srcCompat="@android:drawable/ic_menu_camera"
         android:id="@+id/imageView"
         android:contentDescription="@string/desc2"
-        android:onClick="camera"
+        android:onClick="cameraMod"
         android:background="@android:color/background_light"
         android:layout_centerVertical="true" />
 
@@ -105,18 +103,38 @@
         app:srcCompat="@android:drawable/ic_menu_gallery"
         android:id="@+id/imageView2"
         android:contentDescription="@string/desc"
-        android:onClick="gallery"
+        android:onClick="galleryMod"
         android:background="@android:color/background_light"
         android:layout_below="@+id/imageView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <RadioGroup
+        android:layout_width="146dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/Opciones">
+        <RadioButton
+            android:layout_width="143dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/Disponible"
+            android:text="@string/Disponible"
+            android:background="@android:color/background_light">
+        </RadioButton>
+        <RadioButton
+            android:layout_width="142dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/Nodisponible"
+            android:text="@string/noDisponible"
+            android:background="@android:color/background_light">
+        </RadioButton>
+    </RadioGroup>
 
     <Button
         android:text="@string/publicar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/Boton"
-        android:onClick="publicar"
+        android:onClick="publicarMod"
         android:layout_marginTop="17dp"
         android:layout_below="@+id/imageView2"
         android:layout_alignParentLeft="true"

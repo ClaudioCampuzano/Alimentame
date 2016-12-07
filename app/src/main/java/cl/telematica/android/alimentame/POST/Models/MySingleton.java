@@ -1,4 +1,4 @@
-package cl.telematica.android.alimentame.POST;
+package cl.telematica.android.alimentame.POST.Models;
 
 import android.content.Context;
 

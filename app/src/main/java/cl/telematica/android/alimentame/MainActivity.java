@@ -1,55 +1,36 @@
 package cl.telematica.android.alimentame;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.GeofencingApi;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.maps.model.LatLng;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
-import cl.telematica.android.alimentame.POST.Publicar;
+import cl.telematica.android.alimentame.LogIn.LogInActivity;
+import cl.telematica.android.alimentame.Models.Peticiones;
+import cl.telematica.android.alimentame.POST.Vendedor;
 import cl.telematica.android.alimentame.Presenters.ConectionPresentersImpl;
 import cl.telematica.android.alimentame.Presenters.Contact.ConectionPresenters;
 import cl.telematica.android.alimentame.Presenters.GoogleApi;
+import cl.telematica.android.alimentame.Servicio.ServiceUpdate;
+import cl.telematica.android.alimentame.Servicio.TransferGoogleApi;
 
 /**
  * Demonstrates how to create and remove geofences using the GeofencingApi. Uses an IntentService
@@ -83,67 +64,149 @@ public class MainActivity extends AppCompatActivity{
     //private SharedPreferences mSharedPreferences;
     // Botones que se aprietan y que hacen saltar la accion descrita.
     private Button mAddGeofencesButton;
-    private Button mRemoveGeofencesButton;
     private Button actualizarDatos;
     private Button agregarZona;
+
+    /**** LOGIN INTERVENTION ****/
+    private Button logOutButton;
+    private TextView usuario;
+    /**** LOGIN INTERVENTION ****/
+
     private HashMap<String,LatLng> area;
     private RequestQueue requestQueue;
     private Peticiones peticion;
     private ConectionPresenters conectionPresenters;
     private GoogleApi googleApi;
+
+
+
+    /**** LOGIN INTERVENTION ****/
+    //Variables para saber si se está logeado o no
+    public static final String MyPREFERENCES = "MyPrefs" ;
+
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        if(sharedpreferences.getString("name", "name") == "name") {
+            checkLog();
+        }else {
+            Intent intent = new Intent(MainActivity.this, UserActivity.class);
+            startActivity(intent);
+        }
+    }
+
+
+    /**** LOGIN INTERVENTION ****/
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        /**** LOGIN INTERVENTION ****/
+        SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedpreferences.edit();
+        Toast.makeText(this, "Bienvenido: "+sharedpreferences.getString("name", "name"), Toast.LENGTH_SHORT).show();
+        // Intervención para comprobar el login
+        if(sharedpreferences.getString("name", "name") == "name") {
+            checkLog();
+        }
+        /**** LOGIN INTERVENTION ****/
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Intent intent = new Intent(MainActivity.this, UserActivity.class);
+        //startActivity(intent);
+
         listView = (ListView) findViewById(R.id.list_view);
         drawerLayout=(DrawerLayout) findViewById(R.id.drawer_layout);
         mAddGeofencesButton = (Button) findViewById(R.id.add_geofences_button);
-        mRemoveGeofencesButton = (Button) findViewById(R.id.remove_geofences_button);
         actualizarDatos = (Button) findViewById(R.id.actualizar);
         agregarZona = (Button) findViewById(R.id.agregar);
+        TransferGoogleApi.setLista(null);
+
+
+        /**** LOGIN INTERVENTION ****/
+        logOutButton = (Button)findViewById(R.id.logOut);
+        usuario =(TextView)findViewById(R.id.usuario);
+        /**** LOGIN INTERVENTION ****/
+        usuario.setText(sharedpreferences.getString("name","name"));
         mGeofenceList = new ArrayList<Geofence>();
         mGeofencePendingIntent = null;
-        googleApi = new GoogleApi(mGoogleApiClient,this,mGeofencePendingIntent,mGeofenceList,mRemoveGeofencesButton,mAddGeofencesButton);
-        googleApi.setButtonsEnabledState();
+        googleApi = new GoogleApi(mGoogleApiClient,this,mGeofencePendingIntent,mGeofenceList);
         googleApi.populateGeofenceList(Constants.BAY_AREA_LANDMARKS);
         googleApi.buildGoogleApiClient();
-        area =new HashMap<String, LatLng>();
         peticion = Peticiones.getInstance(this.getApplicationContext());
         requestQueue = peticion.getRequestQueue();
         conectionPresenters = new ConectionPresentersImpl(activity,this,
                 requestQueue,peticion,googleApi);
+
+        /* Servicio */
+        Intent x = new Intent(MainActivity.this,ServiceUpdate.class);
+        TransferGoogleApi.setGoogleApi(googleApi);
+        TransferGoogleApi.setConectionPresenters(conectionPresenters);
+        startService(x);
+
+        conectionPresenters.makeRequest();
+        googleApi.addGeofences();
+
+        conectionPresenters.Extraerdatos().execute();
+        Intent intent = new Intent(MainActivity.this, UserActivity.class);
+        startActivity(intent);
+
         actualizarDatos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                conectionPresenters.makeRequest();
-                Toast.makeText(v.getContext(),"Actualizacion Realizada",Toast.LENGTH_SHORT).show();
-
+                conectionPresenters.Extraerdatos().execute();
+                Intent x = new Intent(MainActivity.this,UserActivity.class);
+                startActivity(x);
             }
         });
         agregarZona.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent variable_aux  = new Intent(MainActivity.this,Publicar.class);
+                Intent variable_aux  = new Intent(MainActivity.this,Vendedor.class);
                 startActivity(variable_aux);
             }
         });
         mAddGeofencesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                conectionPresenters.makeRequest();
                 googleApi.addGeofences();
             }
         });
-        mRemoveGeofencesButton.setOnClickListener(new View.OnClickListener() {
+
+        /**** LOGIN INTERVENTION ****/
+        logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                googleApi.removeGeofences();
+            public void onClick(View view) {
+                editor.clear();
+                editor.commit();
+                Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+                startActivity(intent);
             }
         });
+        /**** LOGIN INTERVENTION ****/
+
+       // startActivity(new Intent(MainActivity.this,UserActivity.class));
+
     }
 
 
     @Override
     protected void onStart() {
+        /**** LOGIN INTERVENTION ****/
+        SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        if(sharedpreferences.getString("name", "name") == "name") {
+            checkLog();
+        }else {
+            Intent intent = new Intent(MainActivity.this, UserActivity.class);
+            startActivity(intent);
+        }
+        /**** LOGIN INTERVENTION ****/
+
         super.onStart();
         googleApi.mGoogleApiClient.connect();
         Toast.makeText(this,"onStart",Toast.LENGTH_LONG);
@@ -156,8 +219,10 @@ public class MainActivity extends AppCompatActivity{
         Toast.makeText(this,"onStop",Toast.LENGTH_LONG);
     }
 
-    /**
-     * Runs when a GoogleApiClient object successfully connects.
-     */
+    /**** LOGIN INTERVENTION ****/
+    public void checkLog(){
+            Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+            startActivity(intent);
 
+    }
 }

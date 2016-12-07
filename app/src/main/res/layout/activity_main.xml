@@ -11,15 +11,70 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <Button
-        android:text="@string/remove_geofences"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/remove_geofences_button"
-        tools:ignore="RelativeOverlap,UnknownId"
-        android:layout_centerVertical="true"
+        android:text="LogOut"
+        android:id="@+id/logOut"
+        android:elevation="24dp"
+        android:backgroundTint="@android:color/holo_orange_light" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_marginRight="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="22dp"
+        android:id="@+id/imageView2"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/cardview_light_background">
+
+        <TextView
+            android:text="Bienvenido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:textSize="24sp"
+            android:textColor="?android:attr/textColorPrimaryNoDisable"
+            android:textStyle="normal|bold"
+            android:layout_below="@+id/imageView2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="36dp"
+            android:layout_marginStart="36dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/usuario"
+            android:textSize="18sp"
+            android:layout_alignBottom="@+id/textView"
+            android:layout_toRightOf="@+id/textView"
+            android:layout_toEndOf="@+id/textView"
+            android:layout_marginLeft="35dp"
+            android:layout_marginStart="35dp"
+            android:layout_weight="1"
+            android:textStyle="normal|bold"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+    </LinearLayout>
 
     <Button
         android:text="@string/add_geofences"
@@ -27,43 +82,29 @@
         android:layout_height="wrap_content"
         android:id="@+id/add_geofences_button"
         tools:ignore="UnknownId"
-        android:layout_alignBaseline="@+id/remove_geofences_button"
-        android:layout_alignBottom="@+id/remove_geofences_button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
-        android:text="Actualizar zonas"
+        android:text="Que tengo cerca?"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
         android:id="@+id/actualizar"
-        android:layout_below="@+id/add_geofences_button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginBottom="25dp"
+        android:layout_above="@+id/agregar"
+        android:layout_centerHorizontal="true" />
 
     <Button
-        android:text="Agregar zona actual"
+        android:text="Crear tenda"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="11dp"
-        android:layout_marginStart="11dp"
         android:id="@+id/agregar"
-        android:layout_alignBottom="@+id/actualizar"
-        android:layout_alignLeft="@+id/remove_geofences_button"
-        android:layout_alignStart="@+id/remove_geofences_button" />
+        android:layout_above="@+id/add_geofences_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="131dp" />
 
-    <ImageView android:id="@+id/imagenLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/iconoapp"
-        android:maxHeight="200dp"
-        android:scaleType="fitCenter"
-        tools:ignore="ContentDescription"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
 </RelativeLayout>
     <ListView
         android:id="@+id/list_view"

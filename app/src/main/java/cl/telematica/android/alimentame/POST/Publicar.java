@@ -1,127 +1,121 @@
 package cl.telematica.android.alimentame.POST;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.kosalgeek.android.photoutil.CameraPhoto;
+import com.kosalgeek.android.photoutil.GalleryPhoto;
+import com.kosalgeek.android.photoutil.ImageLoader;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
+import cl.telematica.android.alimentame.POST.Presenters.Contract.PublicarPresenters;
+import cl.telematica.android.alimentame.POST.Presenters.PublicarImpl;
+import cl.telematica.android.alimentame.POST.View.PublicarView;
 import cl.telematica.android.alimentame.R;
 
-public class Publicar extends AppCompatActivity {
-    EditText Vendedor,Producto;
-    Button insertar;
+public class Publicar extends AppCompatActivity implements PublicarView {
+    private PublicarPresenters mPresenter;
+    public EditText Nombre, Precio, Descripcion;
+    String User_ID;
 
-    GPSTracker gps;
-    Context mContext;
+    ImageView ivImagen;
+    CameraPhoto cameraPhoto;
+    GalleryPhoto galleryPhoto;
+    final int CAMERA_REQUEST = 13323;
+    final int GALLERY_REQUEST = 22131;
+    //private final String TAG = this.getClass().getName();
+    String SelectedPhoto;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    SharedPreferences sharedpreferences;
 
-    String url = "http://alimentame-multimedios.esy.es/insert.php";
-    AlertDialog.Builder builder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         setContentView(R.layout.activity_publicar);
 
-        Vendedor = (EditText)findViewById(R.id.vendedor);
-        Producto = (EditText) findViewById(R.id.producto);
+        cameraPhoto = new CameraPhoto(getApplicationContext());
+        galleryPhoto = new GalleryPhoto(getApplicationContext());
+        ivImagen = (ImageView) findViewById(R.id.foto_seleccion);
 
-        builder = new AlertDialog.Builder(Publicar.this);
 
-        mContext = this;
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(Publicar.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        User_ID = sharedpreferences.getString("User_ID","0");
+        Toast.makeText(this, User_ID, Toast.LENGTH_SHORT).show();
+        mPresenter = new PublicarImpl(this);
+        Nombre = (EditText) findViewById(R.id.Nombre);
+        Precio = (EditText) findViewById(R.id.Precio);
+        Descripcion = (EditText) findViewById(R.id.Descripcion);
+        mPresenter.InicializarGps();
+    }
 
-        } else {
-            gps = new GPSTracker(mContext, Publicar.this);
-            // Check if GPS enabled
-            if (gps.canGetLocation()) {
-                if(String.valueOf(gps.getLongitude()).equalsIgnoreCase("0")&&
-                        String.valueOf(gps.getLatitude()).equalsIgnoreCase("0"))
-                    restartFirstActivity();
-            } else {
-                // Can't get location.
-                // GPS or network is not enabled.
-                // Ask user to enable GPS/network in settings.
-                gps.showSettingsAlert();
+
+    @Override
+    public void camera(View V) {
+        try {
+            startActivityForResult(cameraPhoto.takePhotoIntent(), CAMERA_REQUEST);
+            cameraPhoto.addToGallery();
+        } catch (IOException e) {
+            Toast.makeText(this, "Algo esta mal, imposibru sacar fotos", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void gallery(View V) {
+        startActivityForResult(galleryPhoto.openGalleryIntent(), GALLERY_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CAMERA_REQUEST) {
+                String photoPath = cameraPhoto.getPhotoPath();
+                SelectedPhoto = photoPath;
+                Bitmap bitmap = null;
+                try {
+                    bitmap = ImageLoader.init().from(photoPath).requestSize(512, 512).getBitmap();
+                    ivImagen.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(getApplicationContext(), "Algo anda mal", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else if (requestCode == GALLERY_REQUEST){
+                galleryPhoto.setPhotoUri(data.getData());
+                String photoPath = galleryPhoto.getPath();
+                SelectedPhoto =photoPath;
+                Bitmap bitmap = null;
+                try {
+                    bitmap = ImageLoader.init().from(photoPath).requestSize(512, 512).getBitmap();
+                    ivImagen.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(getApplicationContext(), "Algo anda mal", Toast.LENGTH_SHORT).show();
+                }
             }
         }
-        insertar = (Button) findViewById(R.id.insertar);
-        insertar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                final String vendedor,producto,longitud,latitud;
-                vendedor = Vendedor.getText().toString();
-                producto = Producto.getText().toString();
-                longitud = String.valueOf(gps.getLongitude());
-                latitud = String.valueOf(gps.getLatitude());
-
-                if(!vendedor.equalsIgnoreCase("")&&
-                        !producto.equalsIgnoreCase("")){
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            builder.setMessage(response);
-                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Vendedor.setText("");
-                                    Producto.setText("");
-                                }
-                            });
-                            Toast.makeText(v.getContext(),"Insercion exitosa",Toast.LENGTH_LONG).show();
-                            restartFirstActivity();
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(Publicar.this,"Error",Toast.LENGTH_LONG).show();
-                            error.printStackTrace();
-                        }
-                    }){
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String,String> params = new HashMap<String, String>();
-                            params.put("vendedor",vendedor);
-                            params.put("producto",producto);
-                            params.put("latitud",latitud);
-                            params.put("longitud",longitud);
-                            return params;
-                        }
-                    };
-                    MySingleton.getmInstance(Publicar.this).addTorequestque(stringRequest);
-                }
-                else
-                    Toast.makeText(Publicar.this,"Hay informacion por rellenar",Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-    private void restartFirstActivity()
-    {
-        Intent i = getApplicationContext().getPackageManager()
-                .getLaunchIntentForPackage(getApplicationContext().getPackageName() );
-
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK );
-        startActivity(i);
     }
 
+    @Override
+    public void publicar(View V) {
+        if (!Nombre.getText().toString().equalsIgnoreCase("") &&
+                !Precio.getText().toString().equalsIgnoreCase("") && !Descripcion.getText().toString().equalsIgnoreCase("")) {
+
+            mPresenter.SetData(Nombre.getText().toString(), Precio.getText().toString(), Descripcion.getText().toString(),
+                    User_ID, "1", "http://alimentame-multimedios.esy.es/food.png");
+            mPresenter.UploadData();
+
+        } else {
+            Toast.makeText(Publicar.this, "Hay informacion por rellenar", Toast.LENGTH_LONG).show();
+        }
+    }
 }
