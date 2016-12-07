@@ -1,22 +1,30 @@
 package cl.telematica.android.alimentame.POST;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import cl.telematica.android.alimentame.MainActivity;
 import cl.telematica.android.alimentame.POST.View.VendedorView;
 import cl.telematica.android.alimentame.R;
 
+import static cl.telematica.android.alimentame.MainActivity.MyPREFERENCES;
+
+
 public class Vendedor extends AppCompatActivity implements VendedorView{
     String User_ID;
+    public static final String MyPREFERENCES = "MyPrefs" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vendedor);
-        User_ID = "3";
+        SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        User_ID = sharedpreferences.getString("User_ID", "2");
     }
 
     @Override
